@@ -15,7 +15,7 @@ public class Cancha {
     public boolean entroEnArcoDerecho(Balon balon){
         return balon.getX() - balon.getRadio() > ANCHO - ARCO_ANCHO && balon.getY() > SUELO - ARCO_ALTO;
     }
-    
+
     public double getAncho(){
         return ANCHO;
     }
@@ -30,5 +30,13 @@ public class Cancha {
 
     public double getGravedad(){
         return GRAVEDAD;
+    }
+
+    public double getArcoAlto(){
+        return ARCO_ALTO;
+    }
+
+    public double getArcoAncho(){
+        return ARCO_ANCHO;
     }
 }
