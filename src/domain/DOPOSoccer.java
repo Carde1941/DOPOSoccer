@@ -148,6 +148,10 @@ public class DOPOSoccer {
         return 0;
     }
 
+    public String getInformacion(){
+        return partido.getTipoPartido().getInformacion(getGoles(IZQUIERDO), getGoles(DERECHO));
+    }
+
     public int getGanador() {
         Jugador ganador = partido.getGanador();
         if (ganador == null) {

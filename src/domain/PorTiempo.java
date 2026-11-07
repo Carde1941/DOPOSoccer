@@ -26,6 +26,17 @@ public class PorTiempo extends TipoPartido {
         return seAcaboElTiempo() && golesIzquierdo == golesDerecho;
     }
 
+    @Override
+    public String getInformacion(int golesIzquierdo, int golesDerecho){
+        if(enMuerteSubita(golesIzquierdo, golesDerecho)){
+            return "Muerte súbita";
+        }
+        int segundos = (int) Math.ceil(segundosRestantes);
+        int minutos = segundos / SEGUNDOS_POR_MINUTO;
+        int resto = segundos % SEGUNDOS_POR_MINUTO;
+        return String.format("%d:%02d", minutos, resto);
+    }
+
     public double getSegundosRestantes() {
         return segundosRestantes;
     }
