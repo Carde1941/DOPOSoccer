@@ -14,11 +14,11 @@ public class PartidoTest {
     private Partido partido;
 
     @BeforeEach
-    public void prepararPartido() {
-        izquierdo = new Jugador(new Estadisticas());
-        derecho = new Jugador(new Estadisticas());
-        partido = new Partido(izquierdo, derecho);
-    }
+    public void prepararPartido() throws DOPOSoccerException {
+    izquierdo = new Jugador(new Estadisticas());
+    derecho = new Jugador(new Estadisticas());
+    partido = new Partido(izquierdo, derecho, new PorGoles(3));
+}
 
     @Test
     public void deberiaIniciarConBalonEnElCentroYSinGoles() {

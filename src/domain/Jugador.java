@@ -53,6 +53,10 @@ public class Jugador {
         goles += 1;
     }
 
+    public void sumarPuntos(int cantidad){
+        puntos += cantidad;
+    }
+
     public void recibirGol(){
         barra.recibirGol();
     }
