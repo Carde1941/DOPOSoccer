@@ -16,6 +16,7 @@ public class Partido {
         this.tipoPartido = tipoPartido;
         cancha = new Cancha();
         balon = new Balon(cancha.getAncho() / 2, ALTURA_SAQUE);
+        colocarJugadores();
     }
 
     public void actualizar(double segundos){
@@ -26,6 +27,8 @@ public class Partido {
         balon.actualizar(segundos, cancha);
         jugadorIzquierdo.actualizar(segundos);
         jugadorDerecho.actualizar(segundos);
+        jugadorIzquierdo.moverse(segundos, cancha);
+        jugadorDerecho.moverse(segundos, cancha);
         verificarGol();
         if(tipoPartido.haTerminado(jugadorIzquierdo.getGoles(), jugadorDerecho.getGoles())){
             finalizar();
@@ -84,6 +87,7 @@ public class Partido {
 
     private void reiniciarSaque(){
         balon.reiniciar(cancha.getAncho() / 2, ALTURA_SAQUE);
+        colocarJugadores();
     }
 
     private void finalizar(){
@@ -113,5 +117,11 @@ public class Partido {
         if(!terminado){
             finalizar();
         }
+    }
+
+    private void colocarJugadores() {
+    double y = cancha.getSuelo() - jugadorIzquierdo.getAlto();
+    jugadorIzquierdo.colocar(cancha.getAncho() * 0.25 - jugadorIzquierdo.getAncho() / 2, y);
+    jugadorDerecho.colocar(cancha.getAncho() * 0.75 - jugadorDerecho.getAncho() / 2, y);
     }
 }

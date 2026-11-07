@@ -3,11 +3,16 @@ package domain;
 public class Jugador {
     private static final double DANO_BASE_PATADA = 10.0;
     private static final double DURACION_ATURDIMIENTO = 3.0;
+    private static final double ANCHO = 70.0;
+    private static final double ALTO = 110.0;
+    private static final double VELOCIDAD_BASE = 280.0;
+    private static final double IMPULSO_SALTO_BASE = 720.0;
     private Estadisticas estadisticas;
     private BarraPoder barra;
     private double vida;
-    private int goles, puntos;
-    private double tiempoAturdido;
+    private int goles, puntos, direccion;
+    private double tiempoAturdido, x, y, vy;
+    private boolean enSuelo;
 
     public Jugador(Estadisticas estadisticas){
         this.estadisticas = estadisticas;
@@ -49,6 +54,49 @@ public class Jugador {
         }
     }
 
+    public void colocar(double x, double y){
+        this.x = x;
+        this.y = y;
+        vy = 0;
+        direccion = 0;
+        enSuelo = true;
+    }
+
+    public void saltar(){
+        if(enSuelo && !estaAturdido()){
+            vy = -IMPULSO_SALTO_BASE * estadisticas.multiplicadorJump();
+            enSuelo = false;
+        }
+    }
+
+    public void moverse(double segundos, Cancha cancha){
+        if(!estaAturdido()){
+            x += direccion * VELOCIDAD_BASE * estadisticas.multiplicadorSpeed() * segundos;
+        }
+        vy += cancha.getGravedad() * segundos;
+        y += vy * segundos;
+        if(y + ALTO > cancha.getSuelo()){
+            y = cancha.getSuelo() - ALTO;
+            vy = 0;
+            enSuelo = true;
+        }
+        x = Math.max(x,0);
+        x = Math.min(x, cancha.getAncho() - ANCHO);
+
+    }
+
+    public void moverIzquierda(){
+        direccion = -1;
+    }
+
+    public void moverDerecha(){
+        direccion = 1;
+    }
+
+    public void detenerse(){
+        direccion = 0;
+    }
+
     public void anotarGol(){
         goles += 1;
     }
@@ -79,5 +127,25 @@ public class Jugador {
 
     public Estadisticas getEstadisticas(){
         return estadisticas;
+    }
+
+    public double getX(){
+        return x;
+    }
+
+    public double getY(){
+        return y;
+    }
+
+    public double getAncho(){
+        return ANCHO;
+    }
+
+    public double getAlto(){
+        return ALTO;
+    }
+
+    public boolean estaEnSuelo(){
+        return enSuelo;
     }
 }

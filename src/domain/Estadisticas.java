@@ -15,6 +15,14 @@ public class Estadisticas {
         this.survival = 1;
     }
 
+    public double multiplicadorSpeed(){
+        return 1 + 0.10 * (speed - 1);
+    }
+
+    public double multiplicadorJump(){
+        return 1 + 0.10 * (jump - 1);
+    }
+
     public double multiplicadorKick() {
         return 1 + 0.10 * (kick - 1);
     }
