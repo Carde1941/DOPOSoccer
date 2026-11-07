@@ -1,0 +1,13 @@
+# Compilados de Java
+*.class
+*.jar
+
+# Astah
+*.asta.lock
+
+# BlueJ
+*.ctxt
+package.bh
+
+# Esqueleto antiguo, pendiente de rehacer
+/domain/
