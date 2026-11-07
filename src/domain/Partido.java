@@ -29,6 +29,8 @@ public class Partido {
         jugadorDerecho.actualizar(segundos);
         jugadorIzquierdo.moverse(segundos, cancha);
         jugadorDerecho.moverse(segundos, cancha);
+        balon.chocarCon(jugadorIzquierdo);
+        balon.chocarCon(jugadorDerecho);
         verificarGol();
         if(tipoPartido.haTerminado(jugadorIzquierdo.getGoles(), jugadorDerecho.getGoles())){
             finalizar();
