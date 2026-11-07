@@ -106,4 +106,12 @@ public class PatadaTest {
         izquierdo.actualizar(0.3);
         assertFalse(izquierdo.estaPateando());
     }
+
+    @Test
+    public void noDeberiaDanarAlRivalJustoFueraDelPie() {
+    derecho.colocar(420, 530);
+    izquierdo.patear();
+    partido.actualizar(0.001);
+    assertEquals(100, derecho.getVida(), MARGEN);
+}
 }

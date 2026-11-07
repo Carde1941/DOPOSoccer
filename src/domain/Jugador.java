@@ -107,7 +107,7 @@ public class Jugador {
     }
 
     public boolean ocupaZona(double zonaX, double zonaY, double ancho, double alto){
-        return x < zonaX + ANCHO && x + ANCHO > zonaX && y < zonaY + ALTO && y + ALTO > zonaY; 
+        return x < zonaX + ancho && x + ANCHO > zonaX && y < zonaY + alto && y + ALTO > zonaY;
     }
 
     public void moverIzquierda(){
