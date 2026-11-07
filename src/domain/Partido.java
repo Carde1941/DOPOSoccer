@@ -4,6 +4,10 @@ public class Partido {
     private static final double ALTURA_SAQUE = 100.0;
     private static final int PUNTOS_GANADOR = 100;
     private static final int PUNTOS_PERDEDOR = 25;
+    private static final double ALCANCE_PIE = 60.0;
+    private static final double ALTO_PIE = 50.0;
+    private static final double PATADA_VX = 700.0;
+    private static final double PATADA_VY = -450.0;
     private Cancha cancha;
     private Balon balon;
     private Jugador jugadorIzquierdo, jugadorDerecho;
@@ -31,6 +35,8 @@ public class Partido {
         jugadorDerecho.moverse(segundos, cancha);
         balon.chocarCon(jugadorIzquierdo);
         balon.chocarCon(jugadorDerecho);
+        resolverPatada(jugadorIzquierdo, jugadorDerecho, 1);
+        resolverPatada(jugadorDerecho, jugadorIzquierdo, -1);
         verificarGol();
         if(tipoPartido.haTerminado(jugadorIzquierdo.getGoles(), jugadorDerecho.getGoles())){
             finalizar();
@@ -125,5 +131,23 @@ public class Partido {
     double y = cancha.getSuelo() - jugadorIzquierdo.getAlto();
     jugadorIzquierdo.colocar(cancha.getAncho() * 0.25 - jugadorIzquierdo.getAncho() / 2, y);
     jugadorDerecho.colocar(cancha.getAncho() * 0.75 - jugadorDerecho.getAncho() / 2, y);
+    }
+
+    private void resolverPatada(Jugador pateador, Jugador rival, int sentido){
+        if(!pateador.consumirPatada()){
+            return;
+        }
+        double pieX;
+        if(sentido == 1){
+            pieX = pateador.getX() + pateador.getAncho();
+        } else {
+            pieX = pateador.getX() - ALCANCE_PIE;
+        }
+        double pieY = pateador.getY() + pateador.getAlto() - ALTO_PIE;
+        if(balon.tocaZona(pieX, pieY, ALCANCE_PIE, ALTO_PIE)){
+            balon.aplicarImpulso(sentido * PATADA_VX, PATADA_VY);
+        } else if(rival.ocupaZona(pieX, pieY, ALCANCE_PIE, ALTO_PIE)){
+            rival.recibirDano(pateador.danoPatada());
+        }
     }
 }

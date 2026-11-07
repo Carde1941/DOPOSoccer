@@ -94,10 +94,14 @@ public class Balon {
         return REBOTE;
     }
 
+    public boolean tocaZona(double zonaX, double zonaY, double ancho, double alto) {
+    return x + RADIO > zonaX
+        && x - RADIO < zonaX + ancho
+        && y + RADIO > zonaY
+        && y - RADIO < zonaY + alto;
+    }
+
     private boolean tocaA(Jugador jugador) {
-    return x + RADIO > jugador.getX()
-        && x - RADIO < jugador.getX() + jugador.getAncho()
-        && y + RADIO > jugador.getY()
-        && y - RADIO < jugador.getY() + jugador.getAlto();
+    return tocaZona(jugador.getX(), jugador.getY(), jugador.getAncho(), jugador.getAlto());
     }
 }

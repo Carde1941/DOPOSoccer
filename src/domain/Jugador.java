@@ -7,12 +7,13 @@ public class Jugador {
     private static final double ALTO = 110.0;
     private static final double VELOCIDAD_BASE = 280.0;
     private static final double IMPULSO_SALTO_BASE = 720.0;
+    private static final double DURACION_PATADA = 0.25;
     private Estadisticas estadisticas;
     private BarraPoder barra;
     private double vida;
     private int goles, puntos, direccion;
-    private double tiempoAturdido, x, y, vy;
-    private boolean enSuelo;
+    private double tiempoAturdido, x, y, vy, tiempoPatada;
+    private boolean enSuelo, patadaPendiente;
 
     public Jugador(Estadisticas estadisticas){
         this.estadisticas = estadisticas;
@@ -52,6 +53,7 @@ public class Jugador {
                 vida = estadisticas.vidaMaxima();
             }
         }
+        tiempoPatada = Math.max(tiempoPatada - segundos, 0);
     }
 
     public void colocar(double x, double y){
@@ -83,6 +85,29 @@ public class Jugador {
         x = Math.max(x,0);
         x = Math.min(x, cancha.getAncho() - ANCHO);
 
+    }
+
+    public void patear(){
+        if(!estaAturdido() && !estaPateando()){
+            tiempoPatada = DURACION_PATADA;
+            patadaPendiente = true;
+        }
+    }
+
+    public boolean estaPateando(){
+        return tiempoPatada > 0;
+    }
+
+    public boolean consumirPatada(){
+        if(patadaPendiente){
+            patadaPendiente = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean ocupaZona(double zonaX, double zonaY, double ancho, double alto){
+        return x < zonaX + ANCHO && x + ANCHO > zonaX && y < zonaY + ALTO && y + ALTO > zonaY; 
     }
 
     public void moverIzquierda(){
