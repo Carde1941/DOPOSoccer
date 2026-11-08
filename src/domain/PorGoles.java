@@ -10,8 +10,14 @@ public class PorGoles extends TipoPartido {
         this.golesParaGanar = golesParaGanar;
     }
 
+    @Override 
     public boolean haTerminado(int golesIzquierdo, int golesDerecho){
         return golesIzquierdo >= golesParaGanar || golesDerecho >= golesParaGanar;
+    }
+
+    @Override 
+    public String getInformacion(int golesIzquierdo, int golesDerecho){
+        return "A " + golesParaGanar + " goles";
     }
 
 
