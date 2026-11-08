@@ -14,22 +14,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import domain.*;
+import domain.DOPOSoccer;
 
 public class PanelJuego extends JPanel {
     private static final int MILISEGUNDOS_POR_CUADRO = 16;
     private static final double MAXIMO_SEGUNDOS_POR_CUADRO = 0.05;
 
     private DOPOSoccerGUI ventana;
-    private Partido partido;
+    private DOPOSoccer juego;
+    private Controles controlesIzquierdo;
+    private Controles controlesDerecho;
     private Timer reloj;
     private long ultimoInstante;
 
-    public PanelJuego(DOPOSoccerGUI ventana, Partido partido, int ancho, int alto) {
+    public PanelJuego(DOPOSoccerGUI ventana, DOPOSoccer juego, int ancho, int alto) {
         this.ventana = ventana;
-        this.partido = partido;
+        this.juego = juego;
         setPreferredSize(new Dimension(ancho, alto));
         setFocusable(true);
+        controlesIzquierdo = new Controles(DOPOSoccer.IZQUIERDO, KeyEvent.VK_A,KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_SPACE);
+        controlesDerecho = new Controles(DOPOSoccer.DERECHO, KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_K);
+
         addKeyListener(new ControlTeclado());
         reloj = new Timer(MILISEGUNDOS_POR_CUADRO, e -> ciclo());
     }
@@ -44,18 +49,51 @@ public class PanelJuego extends JPanel {
         long ahora = System.nanoTime();
         double segundos = Math.min((ahora - ultimoInstante) / 1_000_000_000.0, MAXIMO_SEGUNDOS_POR_CUADRO);
         ultimoInstante = ahora;
-        // TE TOCA (1): actualiza el partido con esos segundos, redibuja con repaint(),
-        // y si el partido ya terminó, llama a terminarJuego()
+        juego.actualizar(segundos);
+        repaint();
+        if (juego.haTerminado()){
+            terminarJuego();
+        }
     }
 
     private void terminarJuego() {
         reloj.stop();
-        // TE TOCA (2): arma un mensaje con quién ganó (o empate) y los puntos de cada jugador,
-        // muéstralo con JOptionPane.showMessageDialog(...) y vuelve con ventana.mostrarConfiguracion()
+        int ganador = juego.getGanador();
+        String mensaje;
+        if (ganador == DOPOSoccer.EMPATE){
+            mensaje = "Empate";
+        } else if (ganador == DOPOSoccer.IZQUIERDO){
+            mensaje = "Ganó el jugador izquierdo";
+        } else {
+            mensaje = "Ganó el jugador derecho";
+        }
+        mensaje += "\nMarcador: " + juego.getGoles(DOPOSoccer.IZQUIERDO) + "-" + juego.getGoles(DOPOSoccer.DERECHO);
+        mensaje += "\nPuntos jugador izquierdo: " + juego.getPuntos(DOPOSoccer.IZQUIERDO);
+        mensaje += "\nPuntos jugador derecho: " + juego.getPuntos(DOPOSoccer.DERECHO);
+        JOptionPane.showMessageDialog(this, mensaje,"Fin del partido", JOptionPane.INFORMATION_MESSAGE);
+        ventana.mostrarConfiguracion();
     }
 
     private void cambiarPausa() {
-        // TE TOCA (3): si el partido está pausado, reanúdalo; si no, páusalo
+         if (juego.estaPausado()){
+            juego.reanudar();
+         } else{
+            juego.pausar();
+         }
+    }
+
+    private void confirmarTerminar(){
+        boolean estabaPausado = juego.estaPausado();
+        juego.pausar();
+        controlesIzquierdo.soltarTodo(juego);
+        controlesDerecho.soltarTodo(juego);
+        String[] opciones = {"Sí", "No"};
+        int respuestas = JOptionPane.showOptionDialog(this, "¿Terminar el partido?", "Terminar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+        if (respuestas == 0){
+            juego.terminar();
+        } else if (!estabaPausado){
+            juego.reanudar();
+        }
     }
 
     @Override
@@ -63,41 +101,40 @@ public class PanelJuego extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Cancha cancha = partido.getCancha();
-        g2.scale(getWidth() / cancha.getAncho(), getHeight() / cancha.getAlto());
-        dibujarCancha(g2, cancha);
-        dibujarJugador(g2, partido.getJugadorIzquierdo(), new Color(200, 40, 40), 1);
-        dibujarJugador(g2, partido.getJugadorDerecho(), new Color(40, 80, 200), -1);
-        dibujarBalon(g2, partido.getBalon());
-        dibujarMarcador(g2, cancha);
+        g2.scale(getWidth() / juego.getAnchoCancha(), getHeight() / juego.getAltoCancha());
+        dibujarCancha(g2);
+        dibujarJugador(g2, DOPOSoccer.IZQUIERDO, new Color(200, 40, 40), 1);
+        dibujarJugador(g2, DOPOSoccer.DERECHO, new Color(40, 80, 200), -1);
+        dibujarBalon(g2);
+        dibujarMarcador(g2);
         g2.dispose();
     }
 
-    private void dibujarCancha(Graphics2D g2, Cancha cancha) {
-        int ancho = (int) cancha.getAncho();
-        int suelo = (int) cancha.getSuelo();
-        int arcoAncho = (int) cancha.getArcoAncho();
-        int arcoAlto = (int) cancha.getArcoAlto();
+    private void dibujarCancha(Graphics2D g2) {
+        int ancho = (int) juego.getAnchoCancha();
+        int suelo = (int) juego.getSuelo();
+        int arcoAncho = (int) juego.getAnchoArco();
+        int arcoAlto = (int) juego.getAltoArco();
         g2.setColor(new Color(135, 200, 235));
         g2.fillRect(0, 0, ancho, suelo);
         g2.setColor(new Color(60, 160, 60));
-        g2.fillRect(0, suelo, ancho, (int) cancha.getAlto() - suelo);
+        g2.fillRect(0, suelo, ancho, (int) juego.getAltoCancha() - suelo);
         g2.setColor(Color.WHITE);
         g2.setStroke(new BasicStroke(4));
         g2.drawRect(0, suelo - arcoAlto, arcoAncho, arcoAlto);
         g2.drawRect(ancho - arcoAncho, suelo - arcoAlto, arcoAncho, arcoAlto);
     }
 
-    private void dibujarJugador(Graphics2D g2, Jugador jugador, Color color, int sentido) {
-        int x = (int) jugador.getX();
-        int y = (int) jugador.getY();
-        int ancho = (int) jugador.getAncho();
-        int alto = (int) jugador.getAlto();
-        Color relleno = jugador.estaAturdido() ? Color.GRAY : color;
+    private void dibujarJugador(Graphics2D g2, int jugador, Color color, int sentido) {
+        int x = (int) juego.getXJugador(jugador);
+        int y = (int) juego.getYJugador(jugador);
+        int ancho = (int) juego.getAnchoJugador(jugador);
+        int alto = (int) juego.getAltoJugador(jugador);
+        Color relleno = juego.estaAturdido(jugador) ? Color.GRAY : color;
         g2.setColor(relleno);
         g2.fillOval(x, y, ancho, ancho);
         g2.fillRect(x + 15, y + ancho, ancho - 30, alto - ancho);
-        if (jugador.estaPateando()) {
+        if (juego.estaPateando(jugador)) {
             int pieX = sentido == 1 ? x + ancho : x - 40;
             g2.fillRect(pieX, y + alto - 20, 40, 20);
         }
@@ -106,10 +143,10 @@ public class PanelJuego extends JPanel {
         g2.drawOval(x, y, ancho, ancho);
     }
 
-    private void dibujarBalon(Graphics2D g2, Balon balon) {
-        int radio = (int) balon.getRadio();
-        int x = (int) balon.getX() - radio;
-        int y = (int) balon.getY() - radio;
+    private void dibujarBalon(Graphics2D g2) {
+        int radio = (int) juego.getRadioBalon();
+        int x = (int) juego.getXBalon() - radio;
+        int y = (int) juego.getYBalon() - radio;
         g2.setColor(Color.WHITE);
         g2.fillOval(x, y, radio * 2, radio * 2);
         g2.setColor(Color.BLACK);
@@ -117,58 +154,52 @@ public class PanelJuego extends JPanel {
         g2.drawOval(x, y, radio * 2, radio * 2);
     }
 
-    private void dibujarMarcador(Graphics2D g2, Cancha cancha) {
-        Jugador izquierdo = partido.getJugadorIzquierdo();
-        Jugador derecho = partido.getJugadorDerecho();
-        int centro = (int) cancha.getAncho() / 2;
+    private void dibujarMarcador(Graphics2D g2) {
+        int centro = (int) juego.getAnchoCancha() / 2;
         g2.setColor(Color.BLACK);
         g2.setFont(new Font("SansSerif", Font.BOLD, 48));
-        g2.drawString(izquierdo.getGoles() + " - " + derecho.getGoles(), centro - 55, 60);
+        g2.drawString(juego.getGoles(DOPOSoccer.IZQUIERDO) + " - " + juego.getGoles(DOPOSoccer.DERECHO), centro - 55, 60);
         g2.setFont(new Font("SansSerif", Font.BOLD, 28));
-        if (partido.getTipoPartido() instanceof PorTiempo) {
-            int segundos = (int) Math.ceil(((PorTiempo) partido.getTipoPartido()).getSegundosRestantes());
-            g2.drawString(String.format("%d:%02d", segundos / 60, segundos % 60), centro - 35, 100);
-        }
-        dibujarBarras(g2, izquierdo, 30);
-        dibujarBarras(g2, derecho, (int) cancha.getAncho() - 330);
-        if (partido.estaPausado()) {
+        String informacion = juego.getInformacion();
+        int anchoTexto = g2.getFontMetrics().stringWidth(informacion);
+        g2.drawString(informacion, centro - anchoTexto/2, 100);
+        dibujarBarras(g2, DOPOSoccer.IZQUIERDO, 30);
+        dibujarBarras(g2, DOPOSoccer.DERECHO, (int) juego.getAnchoCancha() - 330);
+        if (juego.estaPausado()) {
             g2.setFont(new Font("SansSerif", Font.BOLD, 72));
-            g2.drawString("PAUSA", centro - 120, (int) cancha.getAlto() / 2);
+            g2.drawString("PAUSA", centro - 120, (int) juego.getAltoCancha() / 2);
         }
     }
 
-    private void dibujarBarras(Graphics2D g2, Jugador jugador, int x) {
-        double vida = jugador.getVida() / jugador.getEstadisticas().vidaMaxima();
+    private void dibujarBarras(Graphics2D g2, int jugador, int x) {
+        double vida = juego.getVida(jugador) / juego.getVidaMaxima(jugador);
         g2.setColor(Color.DARK_GRAY);
         g2.fillRect(x, 20, 300, 20);
         g2.fillRect(x, 50, 300, 12);
         g2.setColor(Color.RED);
         g2.fillRect(x, 20, (int) (300 * vida), 20);
         g2.setColor(Color.ORANGE);
-        g2.fillRect(x, 50, (int) (300 * jugador.getBarra().getProgreso()), 12);
+        g2.fillRect(x, 50, (int) (300 * juego.getProgresoPoder(jugador)), 12);
     }
 
     private class ControlTeclado extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            Jugador izquierdo = partido.getJugadorIzquierdo();
-            Jugador derecho = partido.getJugadorDerecho();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_A -> izquierdo.moverIzquierda();
-                // TE TOCA (4): D mueve a la derecha, W salta, S patea
-                //              flechas LEFT, RIGHT, UP, DOWN hacen lo mismo con el derecho
-                //              P llama a cambiarPausa() y ESCAPE termina el partido
-                default -> { }
+            int tecla = e.getKeyCode();
+            if (tecla == KeyEvent.VK_P){
+                cambiarPausa();
+            } else if (tecla == KeyEvent.VK_ESCAPE){
+                confirmarTerminar();
+            } else{
+                controlesIzquierdo.presionar(tecla, juego);
+                controlesDerecho.presionar(tecla, juego);
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_A, KeyEvent.VK_D -> partido.getJugadorIzquierdo().detenerse();
-                // TE TOCA (5): al soltar LEFT o RIGHT se detiene el derecho
-                default -> { }
+            controlesIzquierdo.soltar(e.getKeyCode(), juego);  
+            controlesDerecho.soltar(e.getKeyCode(), juego);
             }
         }
-    }
 }

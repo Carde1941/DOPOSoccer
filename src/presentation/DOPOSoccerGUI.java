@@ -3,9 +3,10 @@ package presentation;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import domain.Partido;
+import domain.DOPOSoccer;
 
 public class DOPOSoccerGUI extends JFrame {
+    private DOPOSoccer juego = new DOPOSoccer();
 
     public DOPOSoccerGUI() {
         super("DOPOSoccer");
@@ -19,8 +20,16 @@ public class DOPOSoccerGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void iniciarJuego(Partido partido, int ancho, int alto) {
-        
+    public void iniciarJuego(int ancho, int alto) {
+        PanelJuego panel = new PanelJuego(this, juego, ancho, alto);
+        setContentPane(panel);
+        pack();
+        setLocationRelativeTo(null);
+        panel.iniciar();
+    }
+
+    public DOPOSoccer getJuego(){
+        return juego;
     }
 
     public static void main(String[] args) {
