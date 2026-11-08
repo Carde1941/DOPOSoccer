@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import domain.*;
+import domain.DOPOSoccerException;
 
 public class PanelConfiguracion extends JPanel {
     private static final int[][] RESOLUCIONES = {{800, 450}, {1024, 576}, {1280, 720}};
@@ -68,15 +68,13 @@ public class PanelConfiguracion extends JPanel {
     private void jugar() {
         try{
             int cantidad = (Integer) spinnerCantidad.getValue();
-            TipoPartido tipo;
             if(comboTipo.getSelectedIndex() == 0){
-                tipo = new PorGoles(cantidad);
+                ventana.getJuego().nuevoPartidoPorGoles(cantidad);
             } else {
-                tipo = new PorTiempo(cantidad);
+                ventana.getJuego().nuevoPartidoPorTiempo(cantidad);
             }
-            Partido partido = new Partido(new Jugador(new Estadisticas()), new Jugador(new Estadisticas()), tipo);
             int[] resolucion = RESOLUCIONES[comboResolucion.getSelectedIndex()];
-            ventana.iniciarJuego(partido, resolucion[0], resolucion[1]);
+            ventana.iniciarJuego(resolucion[0], resolucion[1]);
         } catch (DOPOSoccerException e){
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
