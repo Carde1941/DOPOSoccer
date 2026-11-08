@@ -85,8 +85,8 @@ public class PanelJuego extends JPanel {
     private void confirmarTerminar(){
         boolean estabaPausado = juego.estaPausado();
         juego.pausar();
-        juego.detenerse(DOPOSoccer.IZQUIERDO);
-        juego.detenerse(DOPOSoccer.DERECHO);
+        controlesIzquierdo.soltarTodo(juego);
+        controlesDerecho.soltarTodo(juego);
         String[] opciones = {"Sí", "No"};
         int respuestas = JOptionPane.showOptionDialog(this, "¿Terminar el partido?", "Terminar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
         if (respuestas == 0){
@@ -160,7 +160,9 @@ public class PanelJuego extends JPanel {
         g2.setFont(new Font("SansSerif", Font.BOLD, 48));
         g2.drawString(juego.getGoles(DOPOSoccer.IZQUIERDO) + " - " + juego.getGoles(DOPOSoccer.DERECHO), centro - 55, 60);
         g2.setFont(new Font("SansSerif", Font.BOLD, 28));
-        //FALTA LA PARTE DEL TIEMPO
+        String informacion = juego.getInformacion();
+        int anchoTexto = g2.getFontMetrics().stringWidth(informacion);
+        g2.drawString(informacion, centro - anchoTexto/2, 100);
         dibujarBarras(g2, DOPOSoccer.IZQUIERDO, 30);
         dibujarBarras(g2, DOPOSoccer.DERECHO, (int) juego.getAnchoCancha() - 330);
         if (juego.estaPausado()) {
