@@ -19,6 +19,7 @@ import domain.DOPOSoccer;
 public class PanelJuego extends JPanel {
     private static final int MILISEGUNDOS_POR_CUADRO = 16;
     private static final double MAXIMO_SEGUNDOS_POR_CUADRO = 0.05;
+    private static final double PASO_FISICA = 0.01;
 
     private DOPOSoccerGUI ventana;
     private DOPOSoccer juego;
@@ -26,6 +27,7 @@ public class PanelJuego extends JPanel {
     private Controles controlesDerecho;
     private Timer reloj;
     private long ultimoInstante;
+
 
     public PanelJuego(DOPOSoccerGUI ventana, DOPOSoccer juego, int ancho, int alto) {
         this.ventana = ventana;
@@ -49,7 +51,11 @@ public class PanelJuego extends JPanel {
         long ahora = System.nanoTime();
         double segundos = Math.min((ahora - ultimoInstante) / 1_000_000_000.0, MAXIMO_SEGUNDOS_POR_CUADRO);
         ultimoInstante = ahora;
-        juego.actualizar(segundos);
+        while (segundos > 0){
+            double paso = Math.min(segundos, PASO_FISICA);
+            juego.actualizar(paso);
+            segundos -= paso;
+        }
         repaint();
         if (juego.haTerminado()){
             terminarJuego();
