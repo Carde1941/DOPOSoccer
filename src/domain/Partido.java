@@ -37,6 +37,7 @@ public class Partido {
         balon.chocarCon(jugadorDerecho);
         resolverPatada(jugadorIzquierdo, jugadorDerecho, 1);
         resolverPatada(jugadorDerecho, jugadorIzquierdo, -1);
+        cancha.rebotarEnTravesanos(balon);
         verificarGol();
         if(tipoPartido.haTerminado(jugadorIzquierdo.getGoles(), jugadorDerecho.getGoles())){
             finalizar();
