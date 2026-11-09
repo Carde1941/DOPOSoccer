@@ -6,4 +6,6 @@ public abstract class TipoPartido {
     };
 
     public abstract boolean haTerminado(int golesIzquierdo, int golesDerecho);
+
+    public abstract String getInformacion(int golesIzquierdo, int golesDerecho);
 }
