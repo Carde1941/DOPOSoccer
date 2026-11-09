@@ -52,6 +52,35 @@ public class Balon {
         }
     }
 
+public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
+    double cercanoX = Math.max(zonaX, Math.min(x, zonaX + ancho));
+    double cercanoY = Math.max(zonaY, Math.min(y, zonaY + alto));
+    double dx = x - cercanoX;
+    double dy = y - cercanoY;
+    double distancia = Math.sqrt(dx * dx + dy * dy);
+    if (distancia >= RADIO){
+        return;
+    }
+    double nx;
+    double ny;
+    if (distancia==0){
+        nx = 0;
+        ny = vy > 0 ? -1 : 1;
+        cercanoY =vy > 0 ? zonaY : zonaY + alto;
+    } else{
+        nx = dx / distancia;
+        ny = dy / distancia;
+    }
+    x = cercanoX + nx * RADIO;
+    y = cercanoY + ny * RADIO;
+    double velocidadNormal = vx * nx + vy * ny;
+    if (velocidadNormal <0){
+        vx -= (1 + REBOTE) * velocidadNormal * nx;
+        vy -= (1 + REBOTE) * velocidadNormal * ny;
+    }
+}
+
+
     public void chocarCon(Jugador jugador){
         if(!tocaA(jugador)){
             return;
