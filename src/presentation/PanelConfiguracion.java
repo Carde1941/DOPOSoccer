@@ -35,7 +35,7 @@ public class PanelConfiguracion extends JPanel {
         comboTipo = new JComboBox<>(new String[] {"Por goles", "Por tiempo"});
         spinnerCantidad = new JSpinner(new SpinnerNumberModel(3, 0, 99, 1));
         etiquetaCantidad = new JLabel("Goles para ganar:");
-        botonJugar = new JButton("Jugar");
+        botonJugar = new BotonJuego("Jugar", Estilo.PRIMARIO);
 
         JPanel campos = new JPanel(new GridLayout(0, 2, 10, 10));
         campos.add(new JLabel("Resolución:"));
