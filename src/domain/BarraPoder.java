@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class BarraPoder {
+public class BarraPoder  {
     private static final double TIEMPO_CARGA = 10;
     private static final double BONO_POR_GOL = TIEMPO_CARGA / 4;
     private double segundosCargados;

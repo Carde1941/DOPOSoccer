@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class Jugador {
+public class Jugador implements Serializable{
     private static final double DANO_BASE_PATADA = 10.0;
     private static final double DURACION_ATURDIMIENTO = 3.0;
     private static final double ANCHO = 70.0;

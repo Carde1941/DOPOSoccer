@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class Cancha {
+public class Cancha implements Serializable{
     private static final double ANCHO = 1280;
     private static final double ALTO = 720;
     private static final double SUELO = 640;

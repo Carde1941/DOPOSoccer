@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class Estadisticas {
+public class Estadisticas implements Serializable{
     private int speed;
     private int kick;
     private int jump;
