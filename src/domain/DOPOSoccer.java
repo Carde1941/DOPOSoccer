@@ -141,17 +141,6 @@ public class DOPOSoccer {
         return jugador(jugador).getPuntos();
     }
 
-    public boolean esPorTiempo() {
-        return partido.getTipoPartido() instanceof PorTiempo;
-    }
-
-    public double getSegundosRestantes() {
-        if (esPorTiempo()) {
-            return ((PorTiempo) partido.getTipoPartido()).getSegundosRestantes();
-        }
-        return 0;
-    }
-
     public String getInformacion(){
         return partido.getTipoPartido().getInformacion(getGoles(IZQUIERDO), getGoles(DERECHO));
     }
@@ -181,7 +170,7 @@ public class DOPOSoccer {
         try(ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(archivo))){
             salida.writeObject(partido);
         } catch (IOException e){
-        throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_GUARDAR);
+        throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_GUARDAR, e);
         }
     }
 }

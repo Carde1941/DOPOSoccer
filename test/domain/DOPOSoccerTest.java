@@ -18,7 +18,7 @@ public class DOPOSoccerTest {
 
     @Test
     public void deberiaCrearUnPartidoPorGoles() {
-        assertFalse(juego.esPorTiempo());
+        assertEquals("A 3 goles", juego.getInformacion());
         assertEquals(0, juego.getGoles(DOPOSoccer.IZQUIERDO));
         assertEquals(0, juego.getGoles(DOPOSoccer.DERECHO));
     }
@@ -26,8 +26,7 @@ public class DOPOSoccerTest {
     @Test
     public void deberiaCrearUnPartidoPorTiempo() throws DOPOSoccerException {
         juego.nuevoPartidoPorTiempo(2);
-        assertTrue(juego.esPorTiempo());
-        assertEquals(120, juego.getSegundosRestantes(), MARGEN);
+        assertEquals("2:00", juego.getInformacion());
     }
 
     @Test

@@ -10,4 +10,8 @@ public class DOPOSoccerException extends Exception {
     public DOPOSoccerException(String message) {
         super(message);
     }
+
+    public DOPOSoccerException(String message, Throwable causa) {
+        super(message, causa);
+    }
 }
