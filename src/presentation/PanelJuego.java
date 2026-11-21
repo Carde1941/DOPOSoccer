@@ -77,7 +77,7 @@ public class PanelJuego extends JPanel {
         mensaje += "\nPuntos jugador izquierdo: " + juego.getPuntos(DOPOSoccer.IZQUIERDO);
         mensaje += "\nPuntos jugador derecho: " + juego.getPuntos(DOPOSoccer.DERECHO);
         JOptionPane.showMessageDialog(this, mensaje,"Fin del partido", JOptionPane.INFORMATION_MESSAGE);
-        ventana.mostrarConfiguracion();
+        ventana.mostrar(DOPOSoccerGUI.MENU);
     }
 
     private void cambiarPausa() {
