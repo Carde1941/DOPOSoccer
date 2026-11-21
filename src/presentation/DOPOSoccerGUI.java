@@ -12,7 +12,6 @@ import domain.DOPOSoccerException;
 
 public class DOPOSoccerGUI extends JFrame {
     public static final String MENU = "menu";
-    public static final String CONFIGURACION = "configuracion";
     public static final String PICADITO = "picadito";
 
     private DOPOSoccer juego = new DOPOSoccer();
@@ -36,17 +35,13 @@ public class DOPOSoccerGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void iniciarJuego(int ancho, int alto) {
-        PanelJuego panel = new PanelJuego(this, juego, ancho, alto);
-        setContentPane(panel);
-        pack();
-        setLocationRelativeTo(null);
-        panel.iniciar();
-    }
-
     public void iniciarPartido() throws DOPOSoccerException {
     configuracion.construir(juego);
-    iniciarJuego(configuracion.getAncho(), configuracion.getAlto());
+    PanelJuego panel = new PanelJuego(this, juego, configuracion);
+    setContentPane(panel);
+    pack();
+    setLocationRelativeTo(null);
+    panel.iniciar();
     }
 
     public ConfiguracionPartido getConfiguracion() {

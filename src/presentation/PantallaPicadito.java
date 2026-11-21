@@ -50,8 +50,8 @@ public class PantallaPicadito extends PanelConFondo {
         c.fill = GridBagConstraints.BOTH;
         c.weighty = 1;
         c.insets = new Insets(0, 6, 0, 6);
-        jugador1 = new TarjetaJugador("Jugador 1", Pais.NIGERIA, Estilo.CIAN);
-        jugador2 = new TarjetaJugador("Jugador 2", Pais.CAMERUN, Estilo.ROSADO);
+        jugador1 = new TarjetaJugador("Jugador 1", Pais.NIGERIA, Estilo.CIAN, true);
+        jugador2 = new TarjetaJugador("Jugador 2", Pais.CAMERUN, Estilo.ROSADO, false);
         c.weightx = 1;
         columnas.add(jugador1, c);
         c.weightx = 1.25;
