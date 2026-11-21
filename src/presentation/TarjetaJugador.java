@@ -22,7 +22,7 @@ public class TarjetaJugador extends PanelNeon {
     private Figura figura;
     private JLabel poder;
 
-    public TarjetaJugador(String titulo, Pais inicial, Color color) {
+    public TarjetaJugador(String titulo, Pais inicial, Color color, boolean mirandoDerecha) {
         super(color);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -31,7 +31,7 @@ public class TarjetaJugador extends PanelNeon {
         c.insets = new Insets(3, 0, 3, 0);
 
         add(etiqueta(titulo, Estilo.BOTON, Estilo.TEXTO), c);
-        figura = new Figura();
+        figura = new Figura(mirandoDerecha);
         add(figura, c);
 
         pais = new Selector<>(Arrays.asList(Pais.values()));
@@ -68,9 +68,15 @@ public class TarjetaJugador extends PanelNeon {
         return l;
     }
 
-    /** Dibuja la imagen del personaje elegido, centrada y sin deformarla. */
+    /**
+     * Dibuja al personaje elegido de cuerpo completo, centrado y sin deformarlo.
+     * Las imágenes miran a la izquierda; el jugador 1 se dibuja en espejo para que mire al centro.
+     */
     private class Figura extends JComponent {
-        Figura() {
+        private boolean mirandoDerecha;
+
+        Figura(boolean mirandoDerecha) {
+            this.mirandoDerecha = mirandoDerecha;
             setPreferredSize(new Dimension(160, 170));
         }
 
@@ -84,7 +90,9 @@ public class TarjetaJugador extends PanelNeon {
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             int alto = getHeight();
             int ancho = alto * imagen.getWidth() / imagen.getHeight();
-            g2.drawImage(imagen, (getWidth() - ancho) / 2, 0, ancho, alto, null);
+            int sentido = mirandoDerecha ? -1 : 1;
+            int izquierda = getWidth() / 2 - sentido * ancho / 2;
+            g2.drawImage(imagen, izquierda, 0, sentido * ancho, alto, null);
             g2.dispose();
         }
     }
