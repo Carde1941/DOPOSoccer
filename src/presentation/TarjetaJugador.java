@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import javax.swing.JComponent;
@@ -66,7 +68,10 @@ public class TarjetaJugador extends PanelNeon {
         return l;
     }
 
-    /** Dibuja al personaje elegido: cabeza y guayo. */
+    /**
+     * Dibuja al personaje elegido de cuerpo completo, centrado y sin deformarlo.
+     * Las imágenes miran a la izquierda; el jugador 1 se dibuja en espejo para que mire al centro.
+     */
     private class Figura extends JComponent {
         private boolean mirandoDerecha;
 
@@ -77,8 +82,18 @@ public class TarjetaJugador extends PanelNeon {
 
         @Override
         protected void paintComponent(Graphics g) {
-            FiguraPersonaje.dibujar((Graphics2D) g, getPais(), getWidth() / 2, getHeight() - 4,
-                getHeight() - 8, mirandoDerecha, false);
+            BufferedImage imagen = Imagenes.get(getPais().getImagen());
+            if (imagen == null) {
+                return;
+            }
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            int alto = getHeight();
+            int ancho = alto * imagen.getWidth() / imagen.getHeight();
+            int sentido = mirandoDerecha ? -1 : 1;
+            int izquierda = getWidth() / 2 - sentido * ancho / 2;
+            g2.drawImage(imagen, izquierda, 0, sentido * ancho, alto, null);
+            g2.dispose();
         }
     }
 }

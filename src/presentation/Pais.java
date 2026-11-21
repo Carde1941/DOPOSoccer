@@ -33,7 +33,10 @@ public enum Pais {
     public double getDuracion() { return duracion; }
     public int getDano() { return dano; }
 
-        /** Archivo de la cabeza dentro de imagenes/, por ejemplo cabezas/corea.png. */
+    /** Personaje de cuerpo completo dentro de imagenes/, por ejemplo personajes/corea.png. */
+    public String getImagen() { return "personajes/" + name().toLowerCase() + ".png"; }
+
+    /** Archivo de la cabeza dentro de imagenes/, por ejemplo cabezas/corea.png. */
     public String getCabeza() { return "cabezas/" + name().toLowerCase() + ".png"; }
 
     /** Archivo del guayo dentro de imagenes/, por ejemplo guayos/corea.png. */
