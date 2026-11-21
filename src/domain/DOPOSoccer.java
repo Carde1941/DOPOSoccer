@@ -1,4 +1,8 @@
 package domain;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class DOPOSoccer {
     public static final int IZQUIERDO = 0;
@@ -168,5 +172,16 @@ public class DOPOSoccer {
             return partido.getJugadorIzquierdo();
         }
         return partido.getJugadorDerecho();
+    }
+
+    public void guardar(File archivo) throws DOPOSoccerException{
+        if (partido == null){
+            throw new DOPOSoccerException(DOPOSoccerException.NO_HAY_PARTIDO);
+        }
+        try(ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(archivo))){
+            salida.writeObject(partido);
+        } catch (IOException e){
+        throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_GUARDAR);
+        }
     }
 }
