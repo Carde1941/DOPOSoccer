@@ -30,7 +30,7 @@ public class PantallaMenu extends PanelConFondo {
 
         JButton jugar = new BotonJuego("¡Jugar!", Estilo.ROSADO);
         jugar.setPreferredSize(new Dimension(300, 58));
-        jugar.addActionListener(e -> ventana.mostrar(DOPOSoccerGUI.CONFIGURACION));
+        jugar.addActionListener(e -> ventana.mostrar(DOPOSoccerGUI.PICADITO));
         add(jugar, c);
 
         JButton abrir = new BotonJuego("Abrir partida", Estilo.CIAN);
