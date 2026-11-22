@@ -13,8 +13,8 @@ public class Catalogo {
 
     static {
         MAQUINAS.put("Torpe", Torpe::new);
-        TIPOS.put("Por tiempo", PorTiempo::new);
-        TIPOS.put("Por goles", PorGoles::new);
+        TIPOS.put("Por tiempo", new CreadorPorTiempo());
+        TIPOS.put("Por goles", new CreadorPorGoles());
     }
 
     private Catalogo(){
@@ -37,10 +37,22 @@ public class Catalogo {
     }
 
     public static TipoPartido crearTipoPartido(String nombre, int cantidad) throws DOPOSoccerException{
+        return creadorDe(nombre).crear(cantidad);
+    }
+
+    public static List<Integer> getCantidades(String tipo) throws DOPOSoccerException{
+        return creadorDe(tipo).getCantidades();
+    }
+
+    public static String describirCantidad(String tipo, int cantidad) throws DOPOSoccerException{
+        return creadorDe(tipo).describir(cantidad);
+    }
+
+    private static CreadorTipoPartido creadorDe(String nombre) throws DOPOSoccerException{
         CreadorTipoPartido creador = TIPOS.get(nombre);
         if (creador==null){
             throw new DOPOSoccerException(DOPOSoccerException.TIPO_DESCONOCIDO);
         }
-        return creador.crear(cantidad);
+        return creador;
     }
 }

@@ -9,6 +9,7 @@ public class ConfiguracionPartido {
     private Pais pais2 = Pais.CAMERUN;
     private String tipo = "Por tiempo";
     private String maquina;
+    private int ladoMaquina;
     private int cantidad = 2;
     private int ancho = 1024;
     private int alto = 576;
@@ -25,7 +26,8 @@ public class ConfiguracionPartido {
         return this;
     }
 
-    public ConfiguracionPartido conMaquina(String maquina) {
+    public ConfiguracionPartido conMaquina(int lado, String maquina) {
+        this.ladoMaquina = lado;
         this.maquina = maquina;
         return this;
     }
@@ -44,7 +46,7 @@ public class ConfiguracionPartido {
     public void construir(DOPOSoccer juego) throws DOPOSoccerException {
         juego.nuevoPartido(tipo, cantidad);
         if (maquina != null) {
-            juego.ponerMaquina(DOPOSoccer.DERECHO, maquina);
+            juego.ponerMaquina(ladoMaquina, maquina);
         }
     }
 

@@ -7,13 +7,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
 /** "Arma el picadito": cada jugador elige país y en el centro se definen las reglas. */
@@ -21,13 +22,6 @@ public class PantallaPicadito extends PanelConFondo {
     private static final String JUGADOR_VS_JUGADOR = "Jugador vs Jugador";
     private static final String JUGADOR_VS_MAQUINA = "Jugador vs Máquina";
     private static final List<String> MODALIDADES = List.of(JUGADOR_VS_JUGADOR, JUGADOR_VS_MAQUINA);
-    private static final List<Cantidad> MINUTOS = List.of(new Cantidad(1, "minuto"), new Cantidad(2, "minutos"),
-        new Cantidad(3, "minutos"), new Cantidad(5, "minutos"));
-    private static final List<Cantidad> GOLES = List.of(new Cantidad(1, "gol"), new Cantidad(3, "goles"),
-        new Cantidad(5, "goles"), new Cantidad(7, "goles"));
-    private static final List<Cantidad> POR_DEFECTO = List.of(new Cantidad(1, ""), new Cantidad(3, ""),
-        new Cantidad(5, ""), new Cantidad(7, ""));
-    private static final Map<String, List<Cantidad>> CANTIDADES = Map.of("Por tiempo", MINUTOS, "Por goles", GOLES);
     private static final List<Resolucion> RESOLUCIONES = List.of(new Resolucion(800, 450),
         new Resolucion(1024, 576), new Resolucion(1280, 720));
 
@@ -81,7 +75,7 @@ public class PantallaPicadito extends PanelConFondo {
         tipo = new Selector<>(ventana.getJuego().getTiposPartido());
         cantidad = new Selector<>(cantidadesDe(tipo.getValor()));
         resolucion = new Selector<>(RESOLUCIONES);
-        cantidad.seleccionar(MINUTOS.get(1));
+        cantidad.seleccionar(new Cantidad(2, "2 minutos"));
         resolucion.seleccionar(RESOLUCIONES.get(2));
         modalidad.alCambiar(this::revisarModalidad);
         tipo.alCambiar(() -> cantidad.setOpciones(cantidadesDe(tipo.getValor())));
@@ -134,7 +128,15 @@ public class PantallaPicadito extends PanelConFondo {
     }
 
     private List<Cantidad> cantidadesDe(String tipoPartido) {
-        return CANTIDADES.getOrDefault(tipoPartido, POR_DEFECTO);
+        List<Cantidad> cantidades = new ArrayList<>();
+        try {
+            for (int valor : ventana.getJuego().getCantidades(tipoPartido)) {
+                cantidades.add(new Cantidad(valor, ventana.getJuego().describirCantidad(tipoPartido, valor)));
+            }
+        } catch (DOPOSoccerException e) {
+            Log.record(e);
+        }
+        return cantidades;
     }
 
     private void jugar() {
@@ -142,7 +144,7 @@ public class PantallaPicadito extends PanelConFondo {
         configuracion.conPaises(jugador1.getPais(), jugador2.getPais()).conResolucion(resolucion.getValor().ancho(), resolucion.getValor().alto());
         configuracion.conTipo(tipo.getValor(), cantidad.getValor().valor());
         if (esContraMaquina()) {
-            configuracion.conMaquina(maquina.getValor());
+            configuracion.conMaquina(DOPOSoccer.DERECHO, maquina.getValor());
         } else {
             configuracion.sinMaquina();
         }
@@ -154,11 +156,11 @@ public class PantallaPicadito extends PanelConFondo {
         }
     }
 
-    /** Una cantidad con su unidad, por ejemplo "2 minutos". */
-    private record Cantidad(int valor, String unidad) {
+    /** Una cantidad con el texto que se muestra, por ejemplo "2 minutos". */
+    private record Cantidad(int valor, String texto) {
         @Override
         public String toString() {
-            return (valor + " " + unidad).trim();
+            return texto;
         }
     }
 

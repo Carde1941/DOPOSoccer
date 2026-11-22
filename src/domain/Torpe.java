@@ -34,7 +34,7 @@ public class Torpe implements Controlador{
     }
 
     @Override
-    public boolean esHumano(){
+    public boolean usaTeclado(){
         return false;
     }
 

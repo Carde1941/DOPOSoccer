@@ -171,8 +171,8 @@ public class Jugador implements Serializable{
         controlador.decidir(this, partido, segundos);
     }
 
-    public boolean esHumano(){
-        return controlador.esHumano();
+    public boolean usaTeclado(){
+        return controlador.usaTeclado();
     }
 
     public void moverIzquierda(){
