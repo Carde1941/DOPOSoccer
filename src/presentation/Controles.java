@@ -8,15 +8,17 @@ public class Controles {
     private int derecha;
     private int saltar;
     private int patear;
+    private int poder;
     private boolean izquierdaPresionada;
     private boolean derechaPresionada;
 
-    public Controles(int jugador, int izquierda, int derecha, int saltar, int patear){
+    public Controles(int jugador, int izquierda, int derecha, int saltar, int patear, int poder){
         this.jugador = jugador;
         this.izquierda = izquierda;
         this.derecha = derecha;
         this.saltar = saltar;
         this.patear = patear;
+        this.poder = poder;
     }
 
     public void presionar(int tecla, DOPOSoccer juego){
@@ -30,6 +32,8 @@ public class Controles {
             juego.saltar(jugador);
         } else if (tecla == patear){
             juego.patear(jugador);
+        } else if (tecla == poder){
+            juego.activarPoder(jugador);
         }
     }
 
