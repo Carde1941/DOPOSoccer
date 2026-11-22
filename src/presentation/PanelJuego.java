@@ -38,22 +38,22 @@ public class PanelJuego extends JPanel {
         .agregar(new VistaCancha())
         .agregar(new VistaArco(DOPOSoccer.IZQUIERDO))
         .agregar(new VistaArco(DOPOSoccer.DERECHO))
-        .agregar(new VistaJugador(DOPOSoccer.IZQUIERDO, configuracion.getPais1()))
-        .agregar(new VistaJugador(DOPOSoccer.DERECHO, configuracion.getPais2()))
+        .agregar(new VistaJugador(DOPOSoccer.IZQUIERDO))
+        .agregar(new VistaJugador(DOPOSoccer.DERECHO))
         .agregar(new VistaBalon())
-        .agregar(new VistaMarcador(configuracion.getPais1(), configuracion.getPais2()))
+        .agregar(new VistaMarcador())
         .agregar(new VistaPausa());
     setFocusable(true);
-        agregarControles(DOPOSoccer.IZQUIERDO, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_SPACE);
-        agregarControles(DOPOSoccer.DERECHO, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_K);
+        agregarControles(DOPOSoccer.IZQUIERDO, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_SPACE, KeyEvent.VK_S);
+        agregarControles(DOPOSoccer.DERECHO, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_K, KeyEvent.VK_DOWN);
 
         addKeyListener(new ControlTeclado());
         reloj = new Timer(MILISEGUNDOS_POR_CUADRO, e -> ciclo());
     }
 
-    private void agregarControles(int jugador, int izquierda, int derecha, int saltar, int patear) {
+    private void agregarControles(int jugador, int izquierda, int derecha, int saltar, int patear, int poder) {
         if (juego.usaTeclado(jugador)) {
-            controles.add(new Controles(jugador, izquierda, derecha, saltar, patear));
+            controles.add(new Controles(jugador, izquierda, derecha, saltar, patear, poder));
         }
     }
 

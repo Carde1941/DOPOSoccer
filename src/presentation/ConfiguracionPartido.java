@@ -45,6 +45,8 @@ public class ConfiguracionPartido {
 
     public void construir(DOPOSoccer juego) throws DOPOSoccerException {
         juego.nuevoPartido(tipo, cantidad);
+        juego.elegirPersonaje(DOPOSoccer.IZQUIERDO, pais1.getNombre());
+        juego.elegirPersonaje(DOPOSoccer.DERECHO, pais2.getNombre());
         if (maquina != null) {
             juego.ponerMaquina(ladoMaquina, maquina);
         }

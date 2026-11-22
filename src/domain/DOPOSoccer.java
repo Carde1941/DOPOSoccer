@@ -154,6 +154,14 @@ public class DOPOSoccer {
         return partido.getBalon().getY();
     }
 
+    public double getVxBalon() {
+        return partido.getBalon().getVx();
+    }
+
+    public double getVyBalon() {
+        return partido.getBalon().getVy();
+    }
+
     public double getRadioBalon() {
         return partido.getBalon().getRadio();
     }
