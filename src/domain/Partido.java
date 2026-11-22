@@ -7,8 +7,6 @@ public class Partido implements Serializable{
     private static final int PUNTOS_PERDEDOR = 25;
     private static final double ALCANCE_PIE = 60.0;
     private static final double ALTO_PIE = 50.0;
-    private static final double PATADA_VX = 700.0;
-    private static final double PATADA_VY = -450.0;
     private Cancha cancha;
     private Balon balon;
     private Jugador jugadorIzquierdo, jugadorDerecho;
@@ -34,6 +32,7 @@ public class Partido implements Serializable{
         jugadorDerecho.actualizar(segundos);
         jugadorIzquierdo.moverse(segundos, cancha);
         jugadorDerecho.moverse(segundos, cancha);
+        jugadorIzquierdo.chocarCon(jugadorDerecho, cancha);
         balon.chocarCon(jugadorIzquierdo);
         balon.chocarCon(jugadorDerecho);
         resolverPatada(jugadorIzquierdo, jugadorDerecho, 1);
@@ -147,7 +146,7 @@ public class Partido implements Serializable{
         }
         double pieY = pateador.getY() + pateador.getAlto() - ALTO_PIE;
         if(balon.tocaZona(pieX, pieY, ALCANCE_PIE, ALTO_PIE)){
-            balon.aplicarImpulso(sentido * PATADA_VX, PATADA_VY);
+            pateador.patearBalon(balon, sentido);
         } else if(rival.ocupaZona(pieX, pieY, ALCANCE_PIE, ALTO_PIE)){
             rival.recibirDano(pateador.danoPatada());
         }
