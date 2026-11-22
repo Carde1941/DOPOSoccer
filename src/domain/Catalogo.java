@@ -18,6 +18,9 @@ public class Catalogo {
         PERSONAJES.put("Nigeria", Nigeria::new);
         PERSONAJES.put("Estados Unidos", EstadosUnidos::new);
         MAQUINAS.put("Torpe", Torpe::new);
+        MAQUINAS.put("Ofensiva", Ofensiva::new);
+        MAQUINAS.put("Defensiva", Defensiva::new);
+        MAQUINAS.put("Experta", Experta::new);
         TIPOS.put("Por tiempo", new CreadorPorTiempo());
         TIPOS.put("Por goles", new CreadorPorGoles());
     }

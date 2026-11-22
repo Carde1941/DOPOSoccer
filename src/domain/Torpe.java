@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Torpe implements Controlador{
     private static final double SEGUNDOS_POR_DECISION = 0.4;
-    private static final int ACCIONES = 5;
+    private static final int ACCIONES = 6;
     private final Random azar;
     private double espera; 
     
@@ -29,6 +29,7 @@ public class Torpe implements Controlador{
             case 1 -> propio.moverDerecha();
             case 2 -> propio.detenerse();
             case 3 -> propio.saltar();
+            case 4 -> propio.activarPoder();
             default -> propio.patear();
         }
     }
