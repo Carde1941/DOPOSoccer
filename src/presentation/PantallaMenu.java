@@ -35,8 +35,7 @@ public class PantallaMenu extends PanelConFondo {
 
         JButton abrir = new BotonJuego("Abrir partida", Estilo.CIAN);
         abrir.setPreferredSize(new Dimension(260, 44));
-        abrir.setEnabled(false);
-        abrir.setToolTipText("Disponible en la versión dos");
+        abrir.addActionListener(e -> ventana.abrirPartido());
         add(abrir, c);
 
         JButton mejoras = new BotonJuego("Mejoras", Estilo.CIAN);
