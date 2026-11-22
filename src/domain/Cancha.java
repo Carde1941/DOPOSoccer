@@ -9,6 +9,19 @@ public class Cancha implements Serializable{
     private static final double ARCO_ANCHO = 90;
     private static final double ARCO_ALTO = 220;
     private static final double GROSOR_TRAVESANO = 10;
+    private static final double DESACELERACION_CESPED = 400;
+
+    private final Friccion friccionSuelo;
+    private final Friccion friccionAire;
+
+    public Cancha(){
+        this(new FriccionConstante(DESACELERACION_CESPED), new SinFriccion());
+    }
+
+    public Cancha(Friccion friccionSuelo, Friccion friccionAire){
+        this.friccionSuelo = friccionSuelo;
+        this.friccionAire = friccionAire;
+    }
 
     public boolean entroEnArcoIzquierdo(Balon balon){
         return balon.getX() + balon.getRadio() < ARCO_ANCHO && balon.getY() > SUELO - ARCO_ALTO;
@@ -46,5 +59,13 @@ public class Cancha implements Serializable{
 
     public double getArcoAncho(){
         return ARCO_ANCHO;
+    }
+
+    public Friccion getFriccionSuelo(){
+        return friccionSuelo;
+    }
+
+    public Friccion getFriccionAire(){
+        return friccionAire;
     }
 }

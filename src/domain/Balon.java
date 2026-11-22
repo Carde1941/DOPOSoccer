@@ -51,6 +51,7 @@ public class Balon implements Serializable{
             x = cancha.getAncho() - RADIO;
             vx = -vx * REBOTE;
         }
+        aplicarFriccion(segundos, cancha);
     }
 
 public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
@@ -100,6 +101,10 @@ public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
         }
     }
 
+    public boolean estaEnElSuelo(Cancha cancha){
+        return y + RADIO >= cancha.getSuelo();
+    }
+
     public double getX(){
         return x;
     }
@@ -133,5 +138,10 @@ public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
 
     private boolean tocaA(Jugador jugador) {
     return tocaZona(jugador.getX(), jugador.getY(), jugador.getAncho(), jugador.getAlto());
+    }
+
+    private void aplicarFriccion(double segundos, Cancha cancha){
+        Friccion friccion = estaEnElSuelo(cancha) ? cancha.getFriccionSuelo() : cancha.getFriccionAire();
+        vx = friccion.frenar(vx, segundos);
     }
 }
