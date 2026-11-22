@@ -1,10 +1,13 @@
 package domain;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+
+import java.util.List;
 
 public class DOPOSoccer {
     public static final int IZQUIERDO = 0;
@@ -189,5 +192,15 @@ public class DOPOSoccer {
             throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_ABRIR, e);
         }
 
+    }
+
+    public List<String> getMaquinas(){
+        return Catalogo.getMaquinas();
+    }
+
+    public void ponerMaquina(int jugador, String perfil) throws DOPOSoccerException{
+        Controlador maquina = Catalogo.crearMaquina(perfil);   
+        Jugador elegido = jugador(jugador);                   
+        elegido.setControlador(maquina);        
     }
 }

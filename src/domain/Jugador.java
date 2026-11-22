@@ -14,6 +14,7 @@ public class Jugador implements Serializable{
     private Estadisticas estadisticas;
     private BarraPoder barra;
     private Tiro tiro;
+    private Controlador controlador;
     private double vida;
     private double tiempoAturdido, x, y, vy, tiempoPatada;
     private boolean enSuelo, patadaPendiente;
@@ -24,6 +25,7 @@ public class Jugador implements Serializable{
         this.estadisticas = estadisticas;
         barra = new BarraPoder();
         tiro = new TiroParabolico(TIRO_VX, TIRO_VY);
+        controlador = new Humano();
         vida = estadisticas.vidaMaxima();
         goles = 0;
         puntos = 0;
@@ -159,6 +161,14 @@ public class Jugador implements Serializable{
 
     public boolean ocupaZona(double zonaX, double zonaY, double ancho, double alto){
         return x < zonaX + ancho && x + ANCHO > zonaX && y < zonaY + alto && y + ALTO > zonaY;
+    }
+
+    public void setControlador(Controlador controlador){
+        this.controlador = controlador;
+    }
+
+    public void decidir(Partido partido, double segundos){
+        controlador.decidir(this, partido, segundos);
     }
 
     public void moverIzquierda(){
