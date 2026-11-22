@@ -129,6 +129,7 @@ public class PantallaPicadito extends PanelConFondo {
             ventana.iniciarPartido();
         } catch (DOPOSoccerException e) {
             aviso.setText(e.getMessage());
+            Log.record(e);
         }
     }
 
@@ -140,7 +141,6 @@ public class PantallaPicadito extends PanelConFondo {
         }
     }
 
-    /** Una resolución de la cancha, por ejemplo "1280 x 720". */
     private record Resolucion(int ancho, int alto) {
         @Override
         public String toString() {
