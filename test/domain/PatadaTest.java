@@ -24,8 +24,8 @@ public class PatadaTest {
         partido.getBalon().reiniciar(380, 615);
         izquierdo.patear();
         partido.actualizar(0.001);
-        assertEquals(700, partido.getBalon().getVx(), MARGEN);
-        assertEquals(-450, partido.getBalon().getVy(), MARGEN);
+        assertEquals(650, partido.getBalon().getVx(), MARGEN);
+        assertEquals(-750, partido.getBalon().getVy(), MARGEN);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class PatadaTest {
         partido.getBalon().reiniciar(900, 615);
         derecho.patear();
         partido.actualizar(0.001);
-        assertEquals(-700, partido.getBalon().getVx(), MARGEN);
+        assertEquals(-650, partido.getBalon().getVx(), MARGEN);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class PatadaTest {
         derecho.colocar(400, 530);
         izquierdo.patear();
         partido.actualizar(0.001);
-        assertEquals(700, partido.getBalon().getVx(), MARGEN);
+        assertEquals(650, partido.getBalon().getVx(), MARGEN);
         assertEquals(100, derecho.getVida(), MARGEN);
     }
 

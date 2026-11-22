@@ -9,8 +9,11 @@ public class Jugador implements Serializable{
     private static final double VELOCIDAD_BASE = 280.0;
     private static final double IMPULSO_SALTO_BASE = 720.0;
     private static final double DURACION_PATADA = 0.25;
+    private static final double TIRO_VX = 650.0;
+    private static final double TIRO_VY = 750.0;
     private Estadisticas estadisticas;
     private BarraPoder barra;
+    private Tiro tiro;
     private double vida;
     private double tiempoAturdido, x, y, vy, tiempoPatada;
     private boolean enSuelo, patadaPendiente;
@@ -20,6 +23,7 @@ public class Jugador implements Serializable{
     public Jugador(Estadisticas estadisticas){
         this.estadisticas = estadisticas;
         barra = new BarraPoder();
+        tiro = new TiroParabolico(TIRO_VX, TIRO_VY);
         vida = estadisticas.vidaMaxima();
         goles = 0;
         puntos = 0;
@@ -74,6 +78,7 @@ public class Jugador implements Serializable{
     }
 
     public void moverse(double segundos, Cancha cancha){
+        enSuelo = false;
         if(!estaAturdido()){
             x += direccion * VELOCIDAD_BASE * estadisticas.multiplicadorSpeed() * segundos;
         }
@@ -84,9 +89,49 @@ public class Jugador implements Serializable{
             vy = 0;
             enSuelo = true;
         }
-        x = Math.max(x,0);
-        x = Math.min(x, cancha.getAncho() - ANCHO);
+        limitarA(cancha);
+    }
 
+    public void chocarCon(Jugador otro, Cancha cancha){
+        if(!ocupaZona(otro.x, otro.y, otro.getAncho(), otro.getAlto())){
+            return;
+        }
+        double solapeX = Math.min(x + ANCHO, otro.x + otro.getAncho()) - Math.max(x, otro.x);
+        double solapeY = Math.min(y + ALTO, otro.y + otro.getAlto()) - Math.max(y, otro.y);
+        if(solapeY < solapeX){
+            Jugador arriba = (y < otro.y) ? this : otro;
+            Jugador abajo = (arriba == this) ? otro : this;
+            arriba.pararseSobre(abajo);
+        } else {
+            Jugador izquierdo = (x <= otro.x) ? this : otro;
+            Jugador derecho = (izquierdo == this) ? otro : this;
+            separar(izquierdo, derecho, solapeX, cancha);
+        }
+    }
+
+    private void pararseSobre(Jugador otro){
+        y = otro.y - ALTO;
+        vy = 0;
+        enSuelo = true;
+    }
+
+    private static void separar(Jugador izquierdo, Jugador derecho, double solape, Cancha cancha){
+        izquierdo.x -= solape / 2;
+        derecho.x += solape / 2;
+        izquierdo.limitarA(cancha);
+        derecho.limitarA(cancha);
+        if(izquierdo.x + izquierdo.getAncho() > derecho.x){
+            if(izquierdo.x <= 0){
+                derecho.x = izquierdo.x + izquierdo.getAncho();
+            } else {
+                izquierdo.x = derecho.x - izquierdo.getAncho();
+            }
+        }
+    }
+
+    private void limitarA(Cancha cancha){
+        x = Math.max(x, 0);
+        x = Math.min(x, cancha.getAncho() - ANCHO);
     }
 
     public void patear(){
@@ -106,6 +151,10 @@ public class Jugador implements Serializable{
             return true;
         }
         return false;
+    }
+
+    public void patearBalon(Balon balon, int sentido){
+        tiro.impulsar(balon, sentido);
     }
 
     public boolean ocupaZona(double zonaX, double zonaY, double ancho, double alto){
