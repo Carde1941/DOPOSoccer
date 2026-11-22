@@ -19,7 +19,6 @@ import domain.DOPOSoccerException;
 public class PantallaPicadito extends PanelConFondo {
     private static final String JUGADOR_VS_JUGADOR = "Jugador vs Jugador";
     private static final List<String> MODALIDADES = List.of(JUGADOR_VS_JUGADOR, "Jugador vs Máquina", "Máquina vs Máquina");
-    private static final List<String> TIPOS = List.of("Por tiempo", "Por goles");
     private static final List<Cantidad> MINUTOS = List.of(new Cantidad(1, "minuto"), new Cantidad(2, "minutos"),
         new Cantidad(3, "minutos"), new Cantidad(5, "minutos"));
     private static final List<Cantidad> GOLES = List.of(new Cantidad(1, "gol"), new Cantidad(3, "goles"),
@@ -71,7 +70,7 @@ public class PantallaPicadito extends PanelConFondo {
         c.insets = new Insets(2, 0, 2, 0);
 
         modalidad = new Selector<>(MODALIDADES);
-        tipo = new Selector<>(TIPOS);
+        tipo = new Selector<>(ventana.getJuego().getTiposPartido());
         cantidad = new Selector<>(MINUTOS);
         resolucion = new Selector<>(RESOLUCIONES);
         cantidad.seleccionar(MINUTOS.get(1));
@@ -120,11 +119,7 @@ public class PantallaPicadito extends PanelConFondo {
     private void jugar() {
         ConfiguracionPartido configuracion = ventana.getConfiguracion();
         configuracion.conPaises(jugador1.getPais(), jugador2.getPais()).conResolucion(resolucion.getValor().ancho(), resolucion.getValor().alto());
-        if (tipo.getValor().equals("Por tiempo")) {
-            configuracion.porTiempo(cantidad.getValor().valor());
-        } else {
-            configuracion.porGoles(cantidad.getValor().valor());
-        }
+        configuracion.conTipo(tipo.getValor(), cantidad.getValor().valor());
         try {
             ventana.iniciarPartido();
         } catch (DOPOSoccerException e) {

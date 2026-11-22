@@ -7,7 +7,7 @@ import domain.DOPOSoccerException;
 public class ConfiguracionPartido {
     private Pais pais1 = Pais.NIGERIA;
     private Pais pais2 = Pais.CAMERUN;
-    private boolean porTiempo = true;
+    private String tipo = "Por tiempo";
     private int cantidad = 2;
     private int ancho = 1024;
     private int alto = 576;
@@ -18,15 +18,9 @@ public class ConfiguracionPartido {
         return this;
     }
 
-    public ConfiguracionPartido porTiempo(int minutos) {
-        this.porTiempo = true;
-        this.cantidad = minutos;
-        return this;
-    }
-
-    public ConfiguracionPartido porGoles(int goles) {
-        this.porTiempo = false;
-        this.cantidad = goles;
+    public ConfiguracionPartido conTipo(String tipo, int cantidad) {
+        this.tipo = tipo;
+        this.cantidad = cantidad;
         return this;
     }
 
@@ -37,11 +31,7 @@ public class ConfiguracionPartido {
     }
 
     public void construir(DOPOSoccer juego) throws DOPOSoccerException {
-        if (porTiempo) {
-            juego.nuevoPartidoPorTiempo(cantidad);
-        } else {
-            juego.nuevoPartidoPorGoles(cantidad);
-        }
+        juego.nuevoPartido(tipo, cantidad);
     }
 
     public Pais getPais1() { return pais1; }

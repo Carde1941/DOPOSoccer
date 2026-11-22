@@ -57,9 +57,9 @@ public class InformacionPartidoTest {
     @Test
     public void laFachadaDeberiaDarLaInformacionDelPartido() throws DOPOSoccerException {
         DOPOSoccer juego = new DOPOSoccer();
-        juego.nuevoPartidoPorGoles(3);
+        juego.nuevoPartido("Por goles", 3);
         assertEquals("A 3 goles", juego.getInformacion());
-        juego.nuevoPartidoPorTiempo(2);
+        juego.nuevoPartido("Por tiempo", 2);
         assertEquals("2:00", juego.getInformacion());
     }
 }

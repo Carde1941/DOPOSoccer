@@ -16,12 +16,13 @@ public class DOPOSoccer {
 
     private Partido partido;
 
-    public void nuevoPartidoPorGoles(int goles) throws DOPOSoccerException {
-        partido = new Partido(new Jugador(new Estadisticas()), new Jugador(new Estadisticas()), new PorGoles(goles));
+    public List<String> getTiposPartido() {
+        return Catalogo.getTiposPartido();
     }
 
-    public void nuevoPartidoPorTiempo(int minutos) throws DOPOSoccerException {
-        partido = new Partido(new Jugador(new Estadisticas()), new Jugador(new Estadisticas()), new PorTiempo(minutos));
+    public void nuevoPartido(String tipo, int cantidad) throws DOPOSoccerException {
+        TipoPartido tipoPartido = Catalogo.crearTipoPartido(tipo, cantidad);
+        partido = new Partido(new Jugador(new Estadisticas()), new Jugador(new Estadisticas()), tipoPartido);
     }
 
     public void actualizar(double segundos) {
