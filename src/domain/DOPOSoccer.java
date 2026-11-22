@@ -1,4 +1,10 @@
 package domain;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 public class DOPOSoccer {
     public static final int IZQUIERDO = 0;
@@ -137,17 +143,6 @@ public class DOPOSoccer {
         return jugador(jugador).getPuntos();
     }
 
-    public boolean esPorTiempo() {
-        return partido.getTipoPartido() instanceof PorTiempo;
-    }
-
-    public double getSegundosRestantes() {
-        if (esPorTiempo()) {
-            return ((PorTiempo) partido.getTipoPartido()).getSegundosRestantes();
-        }
-        return 0;
-    }
-
     public String getInformacion(){
         return partido.getTipoPartido().getInformacion(getGoles(IZQUIERDO), getGoles(DERECHO));
     }
@@ -168,5 +163,31 @@ public class DOPOSoccer {
             return partido.getJugadorIzquierdo();
         }
         return partido.getJugadorDerecho();
+    }
+
+    public void guardar(File archivo) throws DOPOSoccerException{
+        if (partido == null){
+            throw new DOPOSoccerException(DOPOSoccerException.NO_HAY_PARTIDO);
+        }
+        try(FileOutputStream escritura = new FileOutputStream(archivo);
+            ObjectOutputStream salida = new ObjectOutputStream(escritura)){
+            salida.writeObject(partido);
+        } catch (IOException e){
+        throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_GUARDAR, e);
+        }
+    }
+
+    public void abrir(File archivo) throws DOPOSoccerException{
+        try (FileInputStream lectura = new FileInputStream(archivo);
+            ObjectInputStream entrada = new ObjectInputStream(lectura)){
+                Object leido = entrada.readObject();
+            if (!(leido instanceof Partido)){
+                throw new DOPOSoccerException(DOPOSoccerException.ARCHIVO_NO_ES_PARTIDA);
+            }
+            partido = (Partido) leido;
+        } catch(IOException | ClassNotFoundException e){
+            throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_ABRIR, e);
+        }
+
     }
 }

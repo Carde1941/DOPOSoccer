@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class Partido {
+public class Partido implements Serializable{
     private static final double ALTURA_SAQUE = 100.0;
     private static final int PUNTOS_GANADOR = 100;
     private static final int PUNTOS_PERDEDOR = 25;

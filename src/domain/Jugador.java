@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class Jugador {
+public class Jugador implements Serializable{
     private static final double DANO_BASE_PATADA = 10.0;
     private static final double DURACION_ATURDIMIENTO = 3.0;
     private static final double ANCHO = 70.0;
@@ -11,9 +12,10 @@ public class Jugador {
     private Estadisticas estadisticas;
     private BarraPoder barra;
     private double vida;
-    private int goles, puntos, direccion;
     private double tiempoAturdido, x, y, vy, tiempoPatada;
     private boolean enSuelo, patadaPendiente;
+    private int goles, puntos;
+    private transient int direccion;
 
     public Jugador(Estadisticas estadisticas){
         this.estadisticas = estadisticas;

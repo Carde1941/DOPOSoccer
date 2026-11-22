@@ -1,6 +1,7 @@
 package domain;
+import java.io.*;
 
-public class Balon {
+public class Balon implements Serializable{
     private static final double RADIO = 22.0;
     private static final double REBOTE = 0.75;
     private static final double EMPUJE_CABEZA = 250.0;
