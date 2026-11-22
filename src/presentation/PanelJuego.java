@@ -151,7 +151,7 @@ public class PanelJuego extends JPanel {
             } else if (tecla == KeyEvent.VK_ESCAPE){
                 confirmarTerminar();
             } 
-            else if (tecla == KeyEvent.VK_G) {
+            else if (tecla == KeyEvent.VK_G && juego.estaPausado()) {
                 guardar();
             }
             else{

@@ -21,7 +21,7 @@ public class VistaPausa implements Vista {
         g2.setColor(new Color(10, 4, 22, 160));
         g2.fillRect(0, 0, ancho, alto);
         centrado(g2, "PAUSA", GRANDE, Estilo.AMARILLO, ancho, alto / 2);
-        centrado(g2, "P para seguir  ·  Esc para terminar", PEQUENA, Estilo.TEXTO, ancho, alto / 2 + 50);
+        centrado(g2, "P para seguir  ·  G para guardar  ·  Esc para terminar", PEQUENA, Estilo.TEXTO, ancho, alto / 2 + 50);
     }
 
     private void centrado(Graphics2D g2, String texto, Font fuente, Color color, int ancho, int y) {
