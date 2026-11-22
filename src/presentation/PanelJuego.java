@@ -52,7 +52,7 @@ public class PanelJuego extends JPanel {
     }
 
     private void agregarControles(int jugador, int izquierda, int derecha, int saltar, int patear) {
-        if (juego.esHumano(jugador)) {
+        if (juego.usaTeclado(jugador)) {
             controles.add(new Controles(jugador, izquierda, derecha, saltar, patear));
         }
     }

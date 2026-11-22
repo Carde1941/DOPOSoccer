@@ -53,16 +53,16 @@ public class MaquinaTest {
     }
 
     @Test
-    public void elJugadorDeberiaEmpezarComoHumano() {
-        assertTrue(izquierdo.esHumano());
+    public void elJugadorDeberiaEmpezarUsandoTeclado() {
+        assertTrue(izquierdo.usaTeclado());
     }
 
     @Test
-    public void conMaquinaElJugadorNoDeberiaSerHumano() throws DOPOSoccerException {
+    public void conMaquinaElJugadorNoDeberiaUsarTeclado() throws DOPOSoccerException {
         DOPOSoccer juego = new DOPOSoccer();
         juego.nuevoPartido("Por goles", 3);
         juego.ponerMaquina(DOPOSoccer.DERECHO, "Torpe");
-        assertTrue(juego.esHumano(DOPOSoccer.IZQUIERDO));
-        assertFalse(juego.esHumano(DOPOSoccer.DERECHO));
+        assertTrue(juego.usaTeclado(DOPOSoccer.IZQUIERDO));
+        assertFalse(juego.usaTeclado(DOPOSoccer.DERECHO));
     }
 }

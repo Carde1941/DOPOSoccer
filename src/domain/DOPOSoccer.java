@@ -20,6 +20,14 @@ public class DOPOSoccer {
         return Catalogo.getTiposPartido();
     }
 
+    public List<Integer> getCantidades(String tipo) throws DOPOSoccerException {
+        return Catalogo.getCantidades(tipo);
+    }
+
+    public String describirCantidad(String tipo, int cantidad) throws DOPOSoccerException {
+        return Catalogo.describirCantidad(tipo, cantidad);
+    }
+
     public void nuevoPartido(String tipo, int cantidad) throws DOPOSoccerException {
         TipoPartido tipoPartido = Catalogo.crearTipoPartido(tipo, cantidad);
         partido = new Partido(new Jugador(new Estadisticas()), new Jugador(new Estadisticas()), tipoPartido);
@@ -205,7 +213,7 @@ public class DOPOSoccer {
         elegido.setControlador(maquina);        
     }
 
-    public boolean esHumano(int jugador){
-        return jugador(jugador).esHumano();
+    public boolean usaTeclado(int jugador){
+        return jugador(jugador).usaTeclado();
     }
 }

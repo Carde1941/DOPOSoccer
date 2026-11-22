@@ -96,6 +96,6 @@ public class PersistenciaTest {
         DOPOSoccer abierto = new DOPOSoccer();
         abierto.abrir(archivo);
 
-        assertFalse(abierto.esHumano(DOPOSoccer.DERECHO));
+        assertFalse(abierto.usaTeclado(DOPOSoccer.DERECHO));
     }
 }

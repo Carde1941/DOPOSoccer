@@ -6,7 +6,7 @@ public class Humano implements Controlador{
     }
 
     @Override
-    public boolean esHumano(){
+    public boolean usaTeclado(){
         return true;
     }
 }
