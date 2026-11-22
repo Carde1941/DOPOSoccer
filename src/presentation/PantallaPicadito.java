@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -18,11 +19,15 @@ import domain.DOPOSoccerException;
 /** "Arma el picadito": cada jugador elige país y en el centro se definen las reglas. */
 public class PantallaPicadito extends PanelConFondo {
     private static final String JUGADOR_VS_JUGADOR = "Jugador vs Jugador";
-    private static final List<String> MODALIDADES = List.of(JUGADOR_VS_JUGADOR, "Jugador vs Máquina", "Máquina vs Máquina");
+    private static final String JUGADOR_VS_MAQUINA = "Jugador vs Máquina";
+    private static final List<String> MODALIDADES = List.of(JUGADOR_VS_JUGADOR, JUGADOR_VS_MAQUINA);
     private static final List<Cantidad> MINUTOS = List.of(new Cantidad(1, "minuto"), new Cantidad(2, "minutos"),
         new Cantidad(3, "minutos"), new Cantidad(5, "minutos"));
     private static final List<Cantidad> GOLES = List.of(new Cantidad(1, "gol"), new Cantidad(3, "goles"),
         new Cantidad(5, "goles"), new Cantidad(7, "goles"));
+    private static final List<Cantidad> POR_DEFECTO = List.of(new Cantidad(1, ""), new Cantidad(3, ""),
+        new Cantidad(5, ""), new Cantidad(7, ""));
+    private static final Map<String, List<Cantidad>> CANTIDADES = Map.of("Por tiempo", MINUTOS, "Por goles", GOLES);
     private static final List<Resolucion> RESOLUCIONES = List.of(new Resolucion(800, 450),
         new Resolucion(1024, 576), new Resolucion(1280, 720));
 
@@ -30,6 +35,8 @@ public class PantallaPicadito extends PanelConFondo {
     private TarjetaJugador jugador1;
     private TarjetaJugador jugador2;
     private Selector<String> modalidad;
+    private Selector<String> maquina;
+    private JLabel etiquetaMaquina;
     private Selector<String> tipo;
     private Selector<Cantidad> cantidad;
     private Selector<Resolucion> resolucion;
@@ -70,15 +77,17 @@ public class PantallaPicadito extends PanelConFondo {
         c.insets = new Insets(2, 0, 2, 0);
 
         modalidad = new Selector<>(MODALIDADES);
+        maquina = new Selector<>(ventana.getJuego().getMaquinas());
         tipo = new Selector<>(ventana.getJuego().getTiposPartido());
-        cantidad = new Selector<>(MINUTOS);
+        cantidad = new Selector<>(cantidadesDe(tipo.getValor()));
         resolucion = new Selector<>(RESOLUCIONES);
         cantidad.seleccionar(MINUTOS.get(1));
         resolucion.seleccionar(RESOLUCIONES.get(2));
         modalidad.alCambiar(this::revisarModalidad);
-        tipo.alCambiar(() -> cantidad.setOpciones(tipo.getValor().equals("Por tiempo") ? MINUTOS : GOLES));
+        tipo.alCambiar(() -> cantidad.setOpciones(cantidadesDe(tipo.getValor())));
 
         agregar(reglas, c, "Modalidad", modalidad);
+        etiquetaMaquina = agregar(reglas, c, "Máquina", maquina);
         agregar(reglas, c, "Tipo de partido", tipo);
         agregar(reglas, c, "¿Cuánto dura?", cantidad);
         agregar(reglas, c, "Resolución", resolucion);
@@ -99,27 +108,44 @@ public class PantallaPicadito extends PanelConFondo {
         volver.setFont(Estilo.BOTON.deriveFont(14f));
         volver.addActionListener(e -> ventana.mostrar(DOPOSoccerGUI.MENU));
         reglas.add(volver, c);
+        revisarModalidad();
         return reglas;
     }
 
-    private void agregar(JPanel panel, GridBagConstraints c, String nombre, Selector<?> selector) {
+    private JLabel agregar(JPanel panel, GridBagConstraints c, String nombre, Selector<?> selector) {
         JLabel etiqueta = new JLabel(nombre.toUpperCase(), SwingConstants.CENTER);
         etiqueta.setFont(Estilo.NORMAL.deriveFont(12f));
         etiqueta.setForeground(Estilo.CIAN);
         panel.add(etiqueta, c);
         panel.add(selector, c);
+        return etiqueta;
     }
 
     private void revisarModalidad() {
-        boolean disponible = modalidad.getValor().equals(JUGADOR_VS_JUGADOR);
-        aLaCancha.setEnabled(disponible);
-        aviso.setText(disponible ? " " : "Disponible en la versión dos");
+        boolean contraMaquina = esContraMaquina();
+        etiquetaMaquina.setVisible(contraMaquina);
+        maquina.setVisible(contraMaquina);
+        revalidate();
+        repaint();
+    }
+
+    private boolean esContraMaquina() {
+        return modalidad.getValor().equals(JUGADOR_VS_MAQUINA);
+    }
+
+    private List<Cantidad> cantidadesDe(String tipoPartido) {
+        return CANTIDADES.getOrDefault(tipoPartido, POR_DEFECTO);
     }
 
     private void jugar() {
         ConfiguracionPartido configuracion = ventana.getConfiguracion();
         configuracion.conPaises(jugador1.getPais(), jugador2.getPais()).conResolucion(resolucion.getValor().ancho(), resolucion.getValor().alto());
         configuracion.conTipo(tipo.getValor(), cantidad.getValor().valor());
+        if (esContraMaquina()) {
+            configuracion.conMaquina(maquina.getValor());
+        } else {
+            configuracion.sinMaquina();
+        }
         try {
             ventana.iniciarPartido();
         } catch (DOPOSoccerException e) {
@@ -132,7 +158,7 @@ public class PantallaPicadito extends PanelConFondo {
     private record Cantidad(int valor, String unidad) {
         @Override
         public String toString() {
-            return valor + " " + unidad;
+            return (valor + " " + unidad).trim();
         }
     }
 

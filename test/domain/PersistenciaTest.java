@@ -87,5 +87,15 @@ public class PersistenciaTest {
         assertThrows(DOPOSoccerException.class, () -> juego.abrir(archivo));
         assertEquals("A 3 goles", juego.getInformacion());
     }
-    
+
+    @Test
+    public void laMaquinaDeberiaSeguirAlAbrirLaPartida() throws DOPOSoccerException {
+        juego.ponerMaquina(DOPOSoccer.DERECHO, "Torpe");
+        juego.guardar(archivo);
+
+        DOPOSoccer abierto = new DOPOSoccer();
+        abierto.abrir(archivo);
+
+        assertFalse(abierto.esHumano(DOPOSoccer.DERECHO));
+    }
 }

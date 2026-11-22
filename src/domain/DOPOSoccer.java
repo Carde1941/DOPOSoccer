@@ -204,4 +204,8 @@ public class DOPOSoccer {
         Jugador elegido = jugador(jugador);                   
         elegido.setControlador(maquina);        
     }
+
+    public boolean esHumano(int jugador){
+        return jugador(jugador).esHumano();
+    }
 }

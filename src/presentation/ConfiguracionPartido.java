@@ -8,6 +8,7 @@ public class ConfiguracionPartido {
     private Pais pais1 = Pais.NIGERIA;
     private Pais pais2 = Pais.CAMERUN;
     private String tipo = "Por tiempo";
+    private String maquina;
     private int cantidad = 2;
     private int ancho = 1024;
     private int alto = 576;
@@ -24,6 +25,16 @@ public class ConfiguracionPartido {
         return this;
     }
 
+    public ConfiguracionPartido conMaquina(String maquina) {
+        this.maquina = maquina;
+        return this;
+    }
+
+    public ConfiguracionPartido sinMaquina() {
+        this.maquina = null;
+        return this;
+    }
+
     public ConfiguracionPartido conResolucion(int ancho, int alto) {
         this.ancho = ancho;
         this.alto = alto;
@@ -32,6 +43,9 @@ public class ConfiguracionPartido {
 
     public void construir(DOPOSoccer juego) throws DOPOSoccerException {
         juego.nuevoPartido(tipo, cantidad);
+        if (maquina != null) {
+            juego.ponerMaquina(DOPOSoccer.DERECHO, maquina);
+        }
     }
 
     public Pais getPais1() { return pais1; }
