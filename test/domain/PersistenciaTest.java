@@ -25,7 +25,7 @@ public class PersistenciaTest {
     @BeforeEach 
     public void prepararJuego() throws DOPOSoccerException{
         juego = new DOPOSoccer();
-        juego.nuevoPartidoPorGoles(3);
+        juego.nuevoPartido("Por goles", 3);
         archivo = carpeta.resolve("partida.dat").toFile();
     }
 

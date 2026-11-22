@@ -8,7 +8,8 @@ public class DOPOSoccerException extends Exception {
     public static final String GOLES_INVALIDOS = "Los goles para ganar deben ser mayores a 0";
     public static final String ERROR_AL_ABRIR = "No se pudo abrir la partida.";
     public static final String ARCHIVO_NO_ES_PARTIDA = "El archivo no es una partida de DOPOSoccer.";
-    public static final String MAQUINA_DESCONOCIDA = "El perfil de maquina escodigo, no existe.";
+    public static final String MAQUINA_DESCONOCIDA = "El perfil de maquina escogido no existe.";
+    public static final String TIPO_DESCONOCIDO = "El tipo de partido elegido no existe.";
 
     public DOPOSoccerException(String message) {
         super(message);

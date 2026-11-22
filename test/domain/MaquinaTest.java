@@ -46,7 +46,7 @@ public class MaquinaTest {
     @Test
     public void noDeberiaCrearUnaMaquinaQueNoExiste() throws DOPOSoccerException {
         DOPOSoccer juego = new DOPOSoccer();
-        juego.nuevoPartidoPorGoles(3);
+        juego.nuevoPartido("Por goles", 3);
         DOPOSoccerException e = assertThrows(DOPOSoccerException.class,
             () -> juego.ponerMaquina(DOPOSoccer.DERECHO, "Invencible"));
         assertEquals(DOPOSoccerException.MAQUINA_DESCONOCIDA, e.getMessage());

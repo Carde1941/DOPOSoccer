@@ -9,9 +9,12 @@ import java.util.function.Supplier;
 public class Catalogo {
 
     private static final Map<String, Supplier<Controlador>> MAQUINAS = new LinkedHashMap<>();
+    private static final Map<String, CreadorTipoPartido> TIPOS = new LinkedHashMap<>();
 
     static {
         MAQUINAS.put("Torpe", Torpe::new);
+        TIPOS.put("Por tiempo", PorTiempo::new);
+        TIPOS.put("Por goles", PorGoles::new);
     }
 
     private Catalogo(){
@@ -29,12 +32,15 @@ public class Catalogo {
         return creador.get();
     }
 
+    public static List<String> getTiposPartido(){
+        return new ArrayList<>(TIPOS.keySet());
+    }
 
-
-
-
-
-
-
-    
+    public static TipoPartido crearTipoPartido(String nombre, int cantidad) throws DOPOSoccerException{
+        CreadorTipoPartido creador = TIPOS.get(nombre);
+        if (creador==null){
+            throw new DOPOSoccerException(DOPOSoccerException.TIPO_DESCONOCIDO);
+        }
+        return creador.crear(cantidad);
+    }
 }
