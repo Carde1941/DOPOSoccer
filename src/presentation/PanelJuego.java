@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,8 +24,7 @@ public class PanelJuego extends JPanel {
 
     private DOPOSoccerGUI ventana;
     private DOPOSoccer juego;
-    private Controles controlesIzquierdo;
-    private Controles controlesDerecho;
+    private List<Controles> controles = new ArrayList<>();
     private Timer reloj;
     private long ultimoInstante;
     private Vista escena;
@@ -43,11 +44,23 @@ public class PanelJuego extends JPanel {
         .agregar(new VistaMarcador(configuracion.getPais1(), configuracion.getPais2()))
         .agregar(new VistaPausa());
     setFocusable(true);
-        controlesIzquierdo = new Controles(DOPOSoccer.IZQUIERDO, KeyEvent.VK_A,KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_SPACE);
-        controlesDerecho = new Controles(DOPOSoccer.DERECHO, KeyEvent.VK_LEFT,KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_K);
+        agregarControles(DOPOSoccer.IZQUIERDO, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_SPACE);
+        agregarControles(DOPOSoccer.DERECHO, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_K);
 
         addKeyListener(new ControlTeclado());
         reloj = new Timer(MILISEGUNDOS_POR_CUADRO, e -> ciclo());
+    }
+
+    private void agregarControles(int jugador, int izquierda, int derecha, int saltar, int patear) {
+        if (juego.esHumano(jugador)) {
+            controles.add(new Controles(jugador, izquierda, derecha, saltar, patear));
+        }
+    }
+
+    private void soltarTodo() {
+        for (Controles control : controles) {
+            control.soltarTodo(juego);
+        }
     }
 
     public void iniciar() {
@@ -101,8 +114,7 @@ public class PanelJuego extends JPanel {
     private void confirmarTerminar(){
         boolean estabaPausado = juego.estaPausado();
         juego.pausar();
-        controlesIzquierdo.soltarTodo(juego);
-        controlesDerecho.soltarTodo(juego);
+        soltarTodo();
         String[] opciones = {"Sí", "No"};
         int respuestas = JOptionPane.showOptionDialog(this, "¿Terminar el partido?", "Terminar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
         if (respuestas == 0){
@@ -115,8 +127,7 @@ public class PanelJuego extends JPanel {
     private void guardar(){
         boolean estabaPausado = juego.estaPausado();
         juego.pausar();
-        controlesIzquierdo.soltarTodo(juego);
-        controlesDerecho.soltarTodo(juego);
+        soltarTodo();
         JFileChooser selector = new JFileChooser();
         if (selector.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
                 try {
@@ -155,15 +166,17 @@ public class PanelJuego extends JPanel {
                 guardar();
             }
             else{
-                controlesIzquierdo.presionar(tecla, juego);
-                controlesDerecho.presionar(tecla, juego);
+                for (Controles control : controles) {
+                    control.presionar(tecla, juego);
+                }
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            controlesIzquierdo.soltar(e.getKeyCode(), juego);  
-            controlesDerecho.soltar(e.getKeyCode(), juego);
+            for (Controles control : controles) {
+                control.soltar(e.getKeyCode(), juego);
+            }
             }
         }
 }

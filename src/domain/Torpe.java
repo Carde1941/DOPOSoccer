@@ -33,6 +33,11 @@ public class Torpe implements Controlador{
         }
     }
 
+    @Override
+    public boolean esHumano(){
+        return false;
+    }
+
 
 
 }

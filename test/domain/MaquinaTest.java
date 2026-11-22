@@ -51,4 +51,18 @@ public class MaquinaTest {
             () -> juego.ponerMaquina(DOPOSoccer.DERECHO, "Invencible"));
         assertEquals(DOPOSoccerException.MAQUINA_DESCONOCIDA, e.getMessage());
     }
+
+    @Test
+    public void elJugadorDeberiaEmpezarComoHumano() {
+        assertTrue(izquierdo.esHumano());
+    }
+
+    @Test
+    public void conMaquinaElJugadorNoDeberiaSerHumano() throws DOPOSoccerException {
+        DOPOSoccer juego = new DOPOSoccer();
+        juego.nuevoPartido("Por goles", 3);
+        juego.ponerMaquina(DOPOSoccer.DERECHO, "Torpe");
+        assertTrue(juego.esHumano(DOPOSoccer.IZQUIERDO));
+        assertFalse(juego.esHumano(DOPOSoccer.DERECHO));
+    }
 }
