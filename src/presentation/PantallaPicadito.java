@@ -22,6 +22,8 @@ public class PantallaPicadito extends PanelConFondo {
     private static final String JUGADOR_VS_JUGADOR = "Jugador vs Jugador";
     private static final String JUGADOR_VS_MAQUINA = "Jugador vs Máquina";
     private static final List<String> MODALIDADES = List.of(JUGADOR_VS_JUGADOR, JUGADOR_VS_MAQUINA);
+    private static final List<Lado> LADOS = List.of(new Lado(DOPOSoccer.DERECHO, "Derecha"),
+        new Lado(DOPOSoccer.IZQUIERDO, "Izquierda"));
     private static final List<Resolucion> RESOLUCIONES = List.of(new Resolucion(800, 450),
         new Resolucion(1024, 576), new Resolucion(1280, 720));
 
@@ -31,6 +33,8 @@ public class PantallaPicadito extends PanelConFondo {
     private Selector<String> modalidad;
     private Selector<String> maquina;
     private JLabel etiquetaMaquina;
+    private Selector<Lado> ladoMaquina;
+    private JLabel etiquetaLado;
     private Selector<String> tipo;
     private Selector<Cantidad> cantidad;
     private Selector<Resolucion> resolucion;
@@ -68,10 +72,11 @@ public class PantallaPicadito extends PanelConFondo {
         c.gridx = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
-        c.insets = new Insets(2, 0, 2, 0);
+        c.insets = new Insets(1, 0, 0, 0);
 
         modalidad = new Selector<>(MODALIDADES);
         maquina = new Selector<>(ventana.getJuego().getMaquinas());
+        ladoMaquina = new Selector<>(LADOS);
         tipo = new Selector<>(ventana.getJuego().getTiposPartido());
         cantidad = new Selector<>(cantidadesDe(tipo.getValor()));
         resolucion = new Selector<>(RESOLUCIONES);
@@ -82,6 +87,7 @@ public class PantallaPicadito extends PanelConFondo {
 
         agregar(reglas, c, "Modalidad", modalidad);
         etiquetaMaquina = agregar(reglas, c, "Máquina", maquina);
+        etiquetaLado = agregar(reglas, c, "Lado de la máquina", ladoMaquina);
         agregar(reglas, c, "Tipo de partido", tipo);
         agregar(reglas, c, "¿Cuánto dura?", cantidad);
         agregar(reglas, c, "Resolución", resolucion);
@@ -119,6 +125,8 @@ public class PantallaPicadito extends PanelConFondo {
         boolean contraMaquina = esContraMaquina();
         etiquetaMaquina.setVisible(contraMaquina);
         maquina.setVisible(contraMaquina);
+        etiquetaLado.setVisible(contraMaquina);
+        ladoMaquina.setVisible(contraMaquina);
         revalidate();
         repaint();
     }
@@ -144,7 +152,7 @@ public class PantallaPicadito extends PanelConFondo {
         configuracion.conPaises(jugador1.getPais(), jugador2.getPais()).conResolucion(resolucion.getValor().ancho(), resolucion.getValor().alto());
         configuracion.conTipo(tipo.getValor(), cantidad.getValor().valor());
         if (esContraMaquina()) {
-            configuracion.conMaquina(DOPOSoccer.DERECHO, maquina.getValor());
+            configuracion.conMaquina(ladoMaquina.getValor().valor(), maquina.getValor());
         } else {
             configuracion.sinMaquina();
         }
@@ -161,6 +169,14 @@ public class PantallaPicadito extends PanelConFondo {
         @Override
         public String toString() {
             return texto;
+        }
+    }
+
+    /** El lado de la cancha donde juega la máquina. */
+    private record Lado(int valor, String nombre) {
+        @Override
+        public String toString() {
+            return nombre;
         }
     }
 
