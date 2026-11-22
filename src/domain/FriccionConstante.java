@@ -1,6 +1,5 @@
 package domain;
 
-/** Resta siempre la misma desaceleración hasta dejar la velocidad en cero, sin cambiarle el sentido. */
 public class FriccionConstante implements Friccion{
     private final double desaceleracion;
 

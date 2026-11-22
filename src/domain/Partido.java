@@ -27,6 +27,8 @@ public class Partido implements Serializable{
             return;
         }
         tipoPartido.actualizar(segundos);
+        jugadorIzquierdo.decidir(this, segundos);
+        jugadorDerecho.decidir(this, segundos);
         balon.actualizar(segundos, cancha);
         jugadorIzquierdo.actualizar(segundos);
         jugadorDerecho.actualizar(segundos);
