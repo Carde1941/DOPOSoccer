@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
@@ -37,11 +39,30 @@ public class DOPOSoccerGUI extends JFrame {
 
     public void iniciarPartido() throws DOPOSoccerException {
     configuracion.construir(juego);
-    PanelJuego panel = new PanelJuego(this, juego, configuracion);
-    setContentPane(panel);
-    pack();
-    setLocationRelativeTo(null);
-    panel.iniciar();
+    mostrarJuego();
+    }
+
+    public void abrirPartido(){
+        JFileChooser selector = new JFileChooser();
+        if (selector.showOpenDialog(this) != JFileChooser.APPROVE_OPTION ){
+            return;
+        }
+        try {
+            juego.abrir(selector.getSelectedFile());
+            mostrarJuego();
+        } catch (DOPOSoccerException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),"Abrir partida", JOptionPane.ERROR_MESSAGE);
+            Log.record(e);
+        }
+    }
+
+
+    private void mostrarJuego(){
+        PanelJuego panel = new PanelJuego(this, juego, configuracion);
+        setContentPane(panel);
+        pack();
+        setLocationRelativeTo(null);
+        panel.iniciar();
     }
 
     public ConfiguracionPartido getConfiguracion() {

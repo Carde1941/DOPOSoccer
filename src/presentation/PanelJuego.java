@@ -10,8 +10,10 @@ import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.JFileChooser;
 
 import domain.DOPOSoccer;
+import domain.DOPOSoccerException;
 
 public class PanelJuego extends JPanel {
     private static final int MILISEGUNDOS_POR_CUADRO = 16;
@@ -95,6 +97,7 @@ public class PanelJuego extends JPanel {
          }
     }
 
+
     private void confirmarTerminar(){
         boolean estabaPausado = juego.estaPausado();
         juego.pausar();
@@ -107,6 +110,26 @@ public class PanelJuego extends JPanel {
         } else if (!estabaPausado){
             juego.reanudar();
         }
+    }
+
+    private void guardar(){
+        boolean estabaPausado = juego.estaPausado();
+        juego.pausar();
+        controlesIzquierdo.soltarTodo(juego);
+        controlesDerecho.soltarTodo(juego);
+        JFileChooser selector = new JFileChooser();
+        if (selector.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+                try {
+                    juego.guardar(selector.getSelectedFile());
+                } catch (DOPOSoccerException e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Guardar partida",JOptionPane.ERROR_MESSAGE);
+                    Log.record(e);
+                }
+        }
+        if (!estabaPausado){
+            juego.reanudar();
+        }
+        requestFocusInWindow();
     }
 
     @Override
@@ -127,7 +150,11 @@ public class PanelJuego extends JPanel {
                 cambiarPausa();
             } else if (tecla == KeyEvent.VK_ESCAPE){
                 confirmarTerminar();
-            } else{
+            } 
+            else if (tecla == KeyEvent.VK_G) {
+                guardar();
+            }
+            else{
                 controlesIzquierdo.presionar(tecla, juego);
                 controlesDerecho.presionar(tecla, juego);
             }
