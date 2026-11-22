@@ -10,14 +10,31 @@ public class Catalogo {
 
     private static final Map<String, Supplier<Controlador>> MAQUINAS = new LinkedHashMap<>();
     private static final Map<String, CreadorTipoPartido> TIPOS = new LinkedHashMap<>();
+    private static final Map<String, Supplier<Personaje>> PERSONAJES = new LinkedHashMap<>();
 
     static {
+        PERSONAJES.put("Corea del Sur", Corea::new);
+        PERSONAJES.put("Camerún", Camerun::new);
+        PERSONAJES.put("Nigeria", Nigeria::new);
+        PERSONAJES.put("Estados Unidos", EstadosUnidos::new);
         MAQUINAS.put("Torpe", Torpe::new);
         TIPOS.put("Por tiempo", new CreadorPorTiempo());
         TIPOS.put("Por goles", new CreadorPorGoles());
     }
 
     private Catalogo(){
+    }
+
+    public static List<String> getPersonajes(){
+        return new ArrayList<>(PERSONAJES.keySet());
+    }
+
+    public static Personaje crearPersonaje(String nombre) throws DOPOSoccerException{
+        Supplier<Personaje> creador = PERSONAJES.get(nombre);
+        if (creador==null){
+            throw new DOPOSoccerException(DOPOSoccerException.PERSONAJE_DESCONOCIDO);
+        }
+        return creador.get();
     }
 
     public static List<String> getMaquinas(){

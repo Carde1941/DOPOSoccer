@@ -15,17 +15,25 @@ public class Jugador implements Serializable{
     private BarraPoder barra;
     private Tiro tiro;
     private Controlador controlador;
+    private Personaje personaje;
+    private Efecto efecto;
     private double vida;
     private double tiempoAturdido, x, y, vy, tiempoPatada;
-    private boolean enSuelo, patadaPendiente;
+    private boolean enSuelo, patadaPendiente, conAura;
     private int goles, puntos;
     private transient int direccion;
 
     public Jugador(Estadisticas estadisticas){
+        this(estadisticas, new Nigeria());
+    }
+
+    public Jugador(Estadisticas estadisticas, Personaje personaje){
         this.estadisticas = estadisticas;
+        this.personaje = personaje;
         barra = new BarraPoder();
         tiro = new TiroParabolico(TIRO_VX, TIRO_VY);
         controlador = new Humano();
+        efecto = new SinEfecto();
         vida = estadisticas.vidaMaxima();
         goles = 0;
         puntos = 0;
@@ -54,6 +62,10 @@ public class Jugador implements Serializable{
 
     public void actualizar(double segundos){
         barra.actualizar(segundos);
+        efecto.actualizar(segundos);
+        if(efecto.haTerminado()){
+            efecto = new SinEfecto();
+        }
         if(estaAturdido()){
             tiempoAturdido -= segundos;
             if(tiempoAturdido <= 0){
@@ -73,7 +85,7 @@ public class Jugador implements Serializable{
     }
 
     public void saltar(){
-        if(enSuelo && !estaAturdido()){
+        if(enSuelo && !estaAturdido() && efecto.puedeSaltar()){
             vy = -IMPULSO_SALTO_BASE * estadisticas.multiplicadorJump();
             enSuelo = false;
         }
@@ -81,9 +93,10 @@ public class Jugador implements Serializable{
 
     public void moverse(double segundos, Cancha cancha){
         enSuelo = false;
-        if(!estaAturdido()){
-            x += direccion * VELOCIDAD_BASE * estadisticas.multiplicadorSpeed() * segundos;
+        if(!estaAturdido() && efecto.puedeMoverse()){
+            x += direccion * VELOCIDAD_BASE * estadisticas.multiplicadorSpeed() * efecto.getFactorVelocidad() * segundos;
         }
+        x += efecto.getArrastre() * segundos;
         vy += cancha.getGravedad() * segundos;
         y += vy * segundos;
         if(y + ALTO > cancha.getSuelo()){
@@ -137,7 +150,7 @@ public class Jugador implements Serializable{
     }
 
     public void patear(){
-        if(!estaAturdido() && !estaPateando()){
+        if(!estaAturdido() && !estaPateando() && efecto.puedePatear()){
             tiempoPatada = DURACION_PATADA;
             patadaPendiente = true;
         }
@@ -157,6 +170,35 @@ public class Jugador implements Serializable{
 
     public void patearBalon(Balon balon, int sentido){
         tiro.impulsar(balon, sentido);
+    }
+
+    public void activarPoder(){
+        if(barra.estaLlena() && !conAura && !estaAturdido()){
+            conAura = true;
+            barra.vaciar();
+        }
+    }
+
+    public boolean tieneAura(){
+        return conAura;
+    }
+
+    public void lanzarPoder(Balon balon, int sentido){
+        conAura = false;
+        Tiro tiroPoder = personaje.crearTiroPoder();
+        tiroPoder.impulsar(balon, sentido);
+        double dano = personaje.getDanoTiro() * estadisticas.multiplicadorKick();
+        balon.cargarPoder(new TiroPoder(this, dano, personaje.crearEfecto(), tiroPoder.getFactorGravedad()));
+    }
+
+    public void aplicarEfecto(Efecto nuevo, Partido partido){
+        efecto = nuevo;
+        efecto.alEmpezar(this, partido);
+    }
+
+    public void lanzarArriba(double impulso){
+        vy = -impulso;
+        enSuelo = false;
     }
 
     public boolean ocupaZona(double zonaX, double zonaY, double ancho, double alto){
@@ -217,6 +259,18 @@ public class Jugador implements Serializable{
 
     public Estadisticas getEstadisticas(){
         return estadisticas;
+    }
+
+    public Personaje getPersonaje(){
+        return personaje;
+    }
+
+    public void setPersonaje(Personaje personaje){
+        this.personaje = personaje;
+    }
+
+    public Efecto getEfecto(){
+        return efecto;
     }
 
     public double getX(){

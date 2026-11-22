@@ -10,6 +10,7 @@ public class DOPOSoccerException extends Exception {
     public static final String ARCHIVO_NO_ES_PARTIDA = "El archivo no es una partida de DOPOSoccer.";
     public static final String MAQUINA_DESCONOCIDA = "El perfil de maquina escogido no existe.";
     public static final String TIPO_DESCONOCIDO = "El tipo de partido elegido no existe.";
+    public static final String PERSONAJE_DESCONOCIDO = "El personaje elegido no existe.";
 
     public DOPOSoccerException(String message) {
         super(message);

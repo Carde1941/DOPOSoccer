@@ -77,6 +77,54 @@ public class DOPOSoccer {
         jugador(jugador).patear();
     }
 
+    public void activarPoder(int jugador) {
+        jugador(jugador).activarPoder();
+    }
+
+    public List<String> getPersonajes() {
+        return Catalogo.getPersonajes();
+    }
+
+    public void elegirPersonaje(int jugador, String personaje) throws DOPOSoccerException {
+        jugador(jugador).setPersonaje(Catalogo.crearPersonaje(personaje));
+    }
+
+    public String getPersonaje(int jugador) {
+        return jugador(jugador).getPersonaje().getNombre();
+    }
+
+    public boolean tieneAura(int jugador) {
+        return jugador(jugador).tieneAura();
+    }
+
+    public String getEfecto(int jugador) {
+        return jugador(jugador).getEfecto().getNombre();
+    }
+
+    public boolean balonTienePoder() {
+        return partido.getBalon().tienePoder();
+    }
+
+    /** El personaje que lanzó el tiro de poder que lleva el balón, o null si no lleva ninguno. */
+    public String getPersonajeDelPoder() {
+        if (!balonTienePoder()) {
+            return null;
+        }
+        return partido.getBalon().getPoder().getLanzador().getPersonaje().getNombre();
+    }
+
+    public int getCantidadBalonesFalsos() {
+        return partido.getBalonesFalsos().size();
+    }
+
+    public double getXBalonFalso(int indice) {
+        return partido.getBalonesFalsos().get(indice).getX();
+    }
+
+    public double getYBalonFalso(int indice) {
+        return partido.getBalonesFalsos().get(indice).getY();
+    }
+
 
     public double getAnchoCancha() {
         return partido.getCancha().getAncho();
