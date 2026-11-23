@@ -38,12 +38,6 @@ public class PantallaMenu extends PanelConFondo {
         abrir.addActionListener(e -> ventana.abrirPartido());
         add(abrir, c);
 
-        JButton mejoras = new BotonJuego("Mejoras", Estilo.CIAN);
-        mejoras.setPreferredSize(new Dimension(260, 44));
-        mejoras.setEnabled(false);
-        mejoras.setToolTipText("Disponible en la versión dos");
-        add(mejoras, c);
-
         JPanel fila = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         fila.setOpaque(false);
         JButton controles = new BotonJuego("Controles", Estilo.AMARILLO);
