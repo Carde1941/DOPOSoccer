@@ -1,0 +1,152 @@
+% Planificación de las versiones de DOPOSoccer 2026-2.
+% Compila con pdflatex (Overleaf o MiKTeX): pdflatex Planificacion-Versiones.tex  (dos veces, para el total de páginas)
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[letterpaper,top=2cm,bottom=2.4cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage[table]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+
+% ---------- estilo ----------
+\definecolor{gris}{gray}{0.40}
+\definecolor{encabezado}{gray}{0.93}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.35}
+\setlength{\arrayrulewidth}{0.4pt}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}[{\vspace{-4pt}\color{gray!60}\rule{\linewidth}{0.4pt}}]
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{gris} DOPOSoccer · Planificación de las versiones · 22 de noviembre de 2026}
+\fancyfoot[R]{\footnotesize\color{gris} \thepage{} de \pageref{LastPage}}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\encabezado}{\rowcolor{encabezado}}
+\newcommand{\codigo}[1]{\texttt{#1}}
+
+\begin{document}
+
+{\LARGE\bfseries Planificación de las versiones\par}
+\vspace{2pt}
+{\color{gris} DOPOSoccer 2026-2 · Desarrollo Orientado por Objetos · Escuela Colombiana de Ingeniería\par}
+\vspace{6pt}
+
+% ------------------------------------------------------------
+\section{Resumen}
+
+El proyecto se entrega en cuatro versiones. Cada versión agrega una capa o un nivel de juego y se construye en miniciclos cortos. Cada miniciclo es una rama con su Pull Request hacia \codigo{develop}, con código, pruebas unitarias del dominio y, cuando aplica, su parte de la interfaz.
+
+{\small
+\begin{xltabular}{\linewidth}{|L{1.4cm}|L{2.9cm}|Y|L{1.7cm}|}
+\hline
+\encabezado \textbf{Versión} & \textbf{Entrega} & \textbf{Objetivo} & \textbf{Estado} \\ \hline
+\endhead
+Uno & 8 de noviembre & Presentación + Dominio: juego básico Jugador vs Jugador. & \textbf{Entregada} \\ \hline
+Dos & 15 y 21 de noviembre & Persistencia + Dominio: guardar y abrir partidas; nivel medio y Jugador vs Máquina. & \textbf{Entregada} \\ \hline
+Tres & 22 de noviembre & Personajes con tiros de poder, efectos y los cuatro perfiles de máquina, visibles en la interfaz. & \textbf{Entregada} \\ \hline
+Cuatro & 4 de diciembre & Mejora de estadísticas con puntos, progreso de los jugadores y cierre del proyecto para la competencia. & \textbf{En curso} \\ \hline
+\end{xltabular}
+}
+
+% ------------------------------------------------------------
+\section{Versión uno: juego básico}
+
+\textbf{Objetivo:} tener un partido completo Jugador vs Jugador en el mismo teclado, con el dominio y la presentación conectados a través de la fachada \codigo{DOPOSoccer}.
+
+{\small
+\begin{xltabular}{\linewidth}{|L{3.2cm}|L{1.2cm}|Y|}
+\hline
+\encabezado \textbf{Miniciclo} & \textbf{Fecha} & \textbf{Alcance} \\ \hline
+\endhead
+1. Base del dominio & 6 nov & Estadísticas, excepción propia \codigo{DOPOSoccerException} y barra de poder, con sus pruebas. \\ \hline
+2. Elementos del juego & 7 nov & Jugador, cancha con arcos y balón con gravedad, rebotes y choques. \\ \hline
+3. Reglas del partido & 7 nov & Partido, tipos de partido por tiempo (con muerte súbita) y por goles, pausa, puntos, movimiento y patada con daño. \\ \hline
+4. Interfaz conectada & 7 nov & Fachada \codigo{DOPOSoccer}, configuración del partido, reloj del juego y controles fluidos (PR \#4). \\ \hline
+5. Documentación & 8 nov & Diagramas de clases, 10 diagramas de secuencia y retrospectiva (PR \#6 y \#7). Rebote en los travesaños (PR \#9). \\ \hline
+\end{xltabular}
+}
+
+% ------------------------------------------------------------
+\section{Versión dos: persistencia y jugador vs máquina}
+
+\textbf{Objetivo:} guardar y abrir partidas, pasar al nivel medio de juego y permitir jugar contra la máquina.
+
+{\small
+\begin{xltabular}{\linewidth}{|L{3.2cm}|L{1.7cm}|Y|}
+\hline
+\encabezado \textbf{Miniciclo} & \textbf{Fecha} & \textbf{Alcance} \\ \hline
+\endhead
+1. Nueva interfaz & 12 a 21 nov & Menú principal, estilo neón, pantalla ``Arma el picadito'' con los personajes del Anexo 1 y pantalla de juego con HUD y vistas en Composite (PR \#11 y \#13). \\ \hline
+2. Persistencia & 20 y 21 nov & Dominio \codigo{Serializable}, guardar y abrir en la fachada con sus pruebas, y su conexión con la interfaz desde la pausa (PR \#14, \#18 y \#19). \\ \hline
+3. Física del balón & 21 nov & Fricción con Strategy, tiro parabólico con Strategy y choque entre jugadores (PR \#15 y \#17). \\ \hline
+4. Log de errores & 21 nov & Registro de errores para los programadores (PR \#16). \\ \hline
+5. Jugador vs Máquina & 22 nov & Controlador con el perfil Torpe, catálogo de perfiles y de tipos de partido, y elección de la máquina y su lado en la interfaz (PR \#20 a \#24). \\ \hline
+\end{xltabular}
+}
+
+% ------------------------------------------------------------
+\section{Versión tres: poderes y perfiles de máquina}
+
+\textbf{Objetivo:} completar el nivel de juego del enunciado: cada personaje con su tiro de poder y su efecto, y los cuatro perfiles de máquina. Todo debe verse en la interfaz.
+
+{\small
+\begin{xltabular}{\linewidth}{|L{3.2cm}|L{1.2cm}|Y|}
+\hline
+\encabezado \textbf{Miniciclo} & \textbf{Fecha} & \textbf{Alcance} \\ \hline
+\endhead
+1. Personajes y poderes & 22 nov & Personajes en el dominio con Factory Method, activación del poder y aura, tiros de poder con Strategy, efectos (Empuje, Electrocutado, Inconsciente y Confusión) con State y Null Object, y las ocho reglas de poderes del enunciado con sus pruebas (PR \#25). \\ \hline
+2. Perfiles de máquina & 22 nov & Perfiles Ofensiva, Defensiva y Experta con Template Method, y uso del poder en el perfil Torpe (PR \#26). \\ \hline
+3. Poderes en la interfaz & 22 nov & Tecla de poder, aura, estela del tiro, jugadores dormidos al quedar aturdidos o inconscientes, adornos de cada efecto, balones falsos y estado de cada jugador en el marcador (PR \#27). \\ \hline
+4. Diagramas de clases & 22 nov & Actualización de los diagramas de clases del dominio y de la presentación (PR \#28). \\ \hline
+\end{xltabular}
+}
+
+% ------------------------------------------------------------
+\section{Versión cuatro: progreso de los jugadores y cierre}
+
+\textbf{Objetivo:} cumplir los requisitos funcionales que faltan, mejorar estadísticas con puntos y mantener el progreso de los jugadores. Además, corregir fallas y completar los entregables para la competencia.
+
+{\small
+\begin{xltabular}{\linewidth}{|L{2.9cm}|L{1.7cm}|Y|L{1.6cm}|}
+\hline
+\encabezado \textbf{Miniciclo} & \textbf{Fecha} & \textbf{Alcance} & \textbf{Estado} \\ \hline
+\endhead
+1. Mejora de estadísticas & 22 nov & Cada jugador tiene un perfil con sus puntos y estadísticas. Se compra un punto de Speed, Kick, Jump o Survival con un precio que empieza en 500 y se duplica con cada mejora (500, 1000, 2000\ldots), hasta el nivel 10. Incluye pruebas del dominio (PR \#29). & \textbf{Hecho} \\ \hline
+2. Progreso de los jugadores & 22 nov & Los puntos y las estadísticas se conservan entre partidos y en el archivo \codigo{DOPOSoccer.progreso}, aparte de las partidas guardadas. Se guarda al terminar cada partido y se abre al iniciar el juego (PR \#29). & \textbf{Hecho} \\ \hline
+3. Interfaz de mejoras y controles & 22 nov & Botón ``Mejoras'' en la tarjeta de cada jugador de ``Arma el picadito'', estadísticas y puntos en el marcador, mensaje final con los puntos ganados y acumulados, y ventana ``Controles'' desde el menú (PR \#29, \#30 y \#31). & \textbf{Hecho} \\ \hline
+4. Ambientación & 22 nov & Fondos de un gimnasio de box al aire libre, lona blanca y arcos en la imagen de la cancha, y logo del menú con guantes de box (PR \#32). & \textbf{Hecho} \\ \hline
+5. Fallas y deuda técnica & Meta: 30 nov & Corregir las fallas conocidas que sigan abiertas, revisar el juego en las tres resoluciones y completar las pruebas que falten. & \textbf{Pendiente} \\ \hline
+6. Documentación & Meta: 2 dic & Actualizar los diagramas de clases con \codigo{Perfil}, \codigo{DialogoMejoras} y \codigo{DialogoControles}; diagramas de secuencia de los poderes, de las máquinas y de las mejoras; pruebas de aceptación y retrospectiva final. & \textbf{Pendiente} \\ \hline
+7. Competencia & Meta: 3 dic & Ajuste de los perfiles de máquina, ensayo de partidos completos y revisión de que todos los entregables estén en el repositorio. & \textbf{Pendiente} \\ \hline
+\end{xltabular}
+}
+
+% ------------------------------------------------------------
+\section{Requisitos que no se van a incluir}
+
+Todos los requisitos funcionales del enunciado ya están implementados. Lo que falta de la Versión cuatro es corrección de fallas, documentación y preparación para la competencia. No se incluirá lo siguiente, porque el enunciado no lo pide o porque está fuera del alcance de DOPOSoccer:
+
+\begin{itemize}[leftmargin=14pt,itemsep=3pt]
+  \item \textbf{Modalidad Máquina vs Máquina:} el enunciado solo pide Jugador vs Jugador y Jugador vs Máquina. El dominio permite poner una máquina en cada lado, pero la interfaz no lo ofrece.
+  \item \textbf{Modos de juego de Head Soccer} (Arcade, Torneo, Supervivencia, Liga, Head Cup y Death Mode): DOPOSoccer se limita a los partidos por tiempo y por goles.
+  \item \textbf{Personajes adicionales:} se ofrecen los cuatro del Anexo 1. El diseño permite agregar otros con una línea en el catálogo, pero no se agregarán.
+  \item \textbf{Abrir partidas de versiones anteriores:} las partidas guardadas antes de la Versión tres no se pueden abrir, porque cambió la estructura del dominio. El juego muestra un mensaje de error claro.
+\end{itemize}
+
+\end{document}

@@ -1,15 +1,19 @@
 package domain;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Partido {
+public class Partido implements Serializable{
     private static final double ALTURA_SAQUE = 100.0;
     private static final int PUNTOS_GANADOR = 100;
     private static final int PUNTOS_PERDEDOR = 25;
     private static final double ALCANCE_PIE = 60.0;
     private static final double ALTO_PIE = 50.0;
-    private static final double PATADA_VX = 700.0;
-    private static final double PATADA_VY = -450.0;
+    private static final double VELOCIDAD_FALSOS = 700.0;
     private Cancha cancha;
     private Balon balon;
+    private List<Balon> balonesFalsos = new ArrayList<>();
+    private double tiempoFalsos;
     private Jugador jugadorIzquierdo, jugadorDerecho;
     private TipoPartido tipoPartido;
     private boolean terminado, pausado; 
@@ -28,11 +32,17 @@ public class Partido {
             return;
         }
         tipoPartido.actualizar(segundos);
+        jugadorIzquierdo.decidir(this, segundos);
+        jugadorDerecho.decidir(this, segundos);
         balon.actualizar(segundos, cancha);
+        actualizarBalonesFalsos(segundos);
         jugadorIzquierdo.actualizar(segundos);
         jugadorDerecho.actualizar(segundos);
         jugadorIzquierdo.moverse(segundos, cancha);
         jugadorDerecho.moverse(segundos, cancha);
+        jugadorIzquierdo.chocarCon(jugadorDerecho, cancha);
+        resolverPoder(jugadorIzquierdo, jugadorDerecho);
+        resolverPoder(jugadorDerecho, jugadorIzquierdo);
         balon.chocarCon(jugadorIzquierdo);
         balon.chocarCon(jugadorDerecho);
         resolverPatada(jugadorIzquierdo, jugadorDerecho, 1);
@@ -96,6 +106,7 @@ public class Partido {
 
     private void reiniciarSaque(){
         balon.reiniciar(cancha.getAncho() / 2, ALTURA_SAQUE);
+        quitarBalonesFalsos();
         colocarJugadores();
     }
 
@@ -146,9 +157,79 @@ public class Partido {
         }
         double pieY = pateador.getY() + pateador.getAlto() - ALTO_PIE;
         if(balon.tocaZona(pieX, pieY, ALCANCE_PIE, ALTO_PIE)){
-            balon.aplicarImpulso(sentido * PATADA_VX, PATADA_VY);
+            if(pateador.tieneAura()){
+                pateador.lanzarPoder(balon, sentido);
+            } else {
+                pateador.patearBalon(balon, sentido);
+            }
         } else if(rival.ocupaZona(pieX, pieY, ALCANCE_PIE, ALTO_PIE)){
             rival.recibirDano(pateador.danoPatada());
         }
+    }
+
+    private void resolverPoder(Jugador jugador, Jugador rival){
+        if(!balon.toca(jugador)){
+            return;
+        }
+        if(balon.tienePoder() && balon.getPoder().esDe(rival)){
+            recibirTiroPoder(jugador);
+        } else if(jugador.tieneAura()){
+            jugador.lanzarPoder(balon, sentidoDeAtaque(jugador));
+        }
+    }
+
+    private void recibirTiroPoder(Jugador afectado){
+        TiroPoder poder = balon.getPoder();
+        balon.quitarPoder();
+        afectado.recibirDano(poder.getDano());
+        quitarBalonesFalsos();
+        afectado.aplicarEfecto(poder.getEfecto(), this);
+    }
+
+    public int sentidoDeAtaque(Jugador jugador){
+        return (jugador == jugadorIzquierdo) ? 1 : -1;
+    }
+
+    public int sentidoHaciaSuArco(Jugador jugador){
+        return -sentidoDeAtaque(jugador);
+    }
+
+    public Jugador rivalDe(Jugador jugador){
+        return (jugador == jugadorIzquierdo) ? jugadorDerecho : jugadorIzquierdo;
+    }
+
+    public void dividirBalon(int cantidad, double duracion){
+        quitarBalonesFalsos();
+        for(int i = 0; i < cantidad; i++){
+            Balon falso = new Balon(balon.getX(), balon.getY());
+            double angulo = Math.PI * (i + 1) / (cantidad + 1);
+            falso.aplicarImpulso(Math.cos(angulo) * VELOCIDAD_FALSOS, -Math.sin(angulo) * VELOCIDAD_FALSOS);
+            balonesFalsos.add(falso);
+        }
+        tiempoFalsos = duracion;
+    }
+
+    private void actualizarBalonesFalsos(double segundos){
+        if(balonesFalsos.isEmpty()){
+            return;
+        }
+        tiempoFalsos -= segundos;
+        if(tiempoFalsos <= 0){
+            quitarBalonesFalsos();
+            return;
+        }
+        for(Balon falso : balonesFalsos){
+            falso.actualizar(segundos, cancha);
+            cancha.rebotarEnTravesanos(falso);
+        }
+    }
+
+    private void quitarBalonesFalsos(){
+        balonesFalsos.clear();
+        tiempoFalsos = 0;
+    }
+
+    public List<Balon> getBalonesFalsos(){
+        return balonesFalsos;
     }
 }

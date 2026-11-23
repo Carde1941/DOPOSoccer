@@ -1,11 +1,13 @@
 package domain;
+import java.io.*;
 
-public class Balon {
+public class Balon implements Serializable{
     private static final double RADIO = 22.0;
     private static final double REBOTE = 0.75;
     private static final double EMPUJE_CABEZA = 250.0;
     private static final double EMPUJE_LATERAL = 150.0;
     private double x, y, vx, vy;
+    private TiroPoder poder;
 
     public Balon(double x, double y){
         this.x = x;
@@ -24,10 +26,35 @@ public class Balon {
         this.y = y;
         vx = 0;
         vy = 0;
+        poder = null;
+    }
+
+    public void cargarPoder(TiroPoder poder){
+        this.poder = poder;
+    }
+
+    public void quitarPoder(){
+        poder = null;
+    }
+
+    public boolean tienePoder(){
+        return poder != null;
+    }
+
+    public TiroPoder getPoder(){
+        return poder;
     }
 
     public void actualizar(double segundos, Cancha cancha){
-        vy += cancha.getGravedad() * segundos;
+        double factorGravedad = 1;
+        if(poder != null){
+            factorGravedad = poder.getFactorGravedad();
+            poder.actualizar(segundos);
+            if(poder.haTerminado()){
+                poder = null;
+            }
+        }
+        vy += cancha.getGravedad() * factorGravedad * segundos;
         x += vx * segundos;
         y += vy * segundos;
 
@@ -44,12 +71,15 @@ public class Balon {
         if(x - RADIO < 0){
             x = RADIO;
             vx = -vx * REBOTE;
+            poder = null;
         }
 
         if(x + RADIO > cancha.getAncho()){
             x = cancha.getAncho() - RADIO;
             vx = -vx * REBOTE;
+            poder = null;
         }
+        aplicarFriccion(segundos, cancha);
     }
 
 public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
@@ -82,7 +112,7 @@ public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
 
 
     public void chocarCon(Jugador jugador){
-        if(!tocaA(jugador)){
+        if(!toca(jugador) || (poder != null && poder.esDe(jugador))){
             return;
         }
         else{
@@ -97,6 +127,10 @@ public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
                 vx = Math.abs(vx) * REBOTE + EMPUJE_LATERAL;
             }
         }
+    }
+
+    public boolean estaEnElSuelo(Cancha cancha){
+        return y + RADIO >= cancha.getSuelo();
     }
 
     public double getX(){
@@ -130,7 +164,12 @@ public void rebotarEn(double zonaX, double zonaY, double ancho, double alto){
         && y - RADIO < zonaY + alto;
     }
 
-    private boolean tocaA(Jugador jugador) {
+    public boolean toca(Jugador jugador) {
     return tocaZona(jugador.getX(), jugador.getY(), jugador.getAncho(), jugador.getAlto());
+    }
+
+    private void aplicarFriccion(double segundos, Cancha cancha){
+        Friccion friccion = estaEnElSuelo(cancha) ? cancha.getFriccionSuelo() : cancha.getFriccionAire();
+        vx = friccion.frenar(vx, segundos);
     }
 }

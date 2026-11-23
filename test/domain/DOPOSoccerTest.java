@@ -13,31 +13,30 @@ public class DOPOSoccerTest {
     @BeforeEach
     public void prepararJuego() throws DOPOSoccerException {
         juego = new DOPOSoccer();
-        juego.nuevoPartidoPorGoles(3);
+        juego.nuevoPartido("Por goles", 3);
     }
 
     @Test
     public void deberiaCrearUnPartidoPorGoles() {
-        assertFalse(juego.esPorTiempo());
+        assertEquals("A 3 goles", juego.getInformacion());
         assertEquals(0, juego.getGoles(DOPOSoccer.IZQUIERDO));
         assertEquals(0, juego.getGoles(DOPOSoccer.DERECHO));
     }
 
     @Test
     public void deberiaCrearUnPartidoPorTiempo() throws DOPOSoccerException {
-        juego.nuevoPartidoPorTiempo(2);
-        assertTrue(juego.esPorTiempo());
-        assertEquals(120, juego.getSegundosRestantes(), MARGEN);
+        juego.nuevoPartido("Por tiempo", 2);
+        assertEquals("2:00", juego.getInformacion());
     }
 
     @Test
     public void noDeberiaCrearUnPartidoConGolesInvalidos() {
-        assertThrows(DOPOSoccerException.class, () -> juego.nuevoPartidoPorGoles(0));
+        assertThrows(DOPOSoccerException.class, () -> juego.nuevoPartido("Por goles", 0));
     }
 
     @Test
     public void noDeberiaCrearUnPartidoConMinutosInvalidos() {
-        assertThrows(DOPOSoccerException.class, () -> juego.nuevoPartidoPorTiempo(0));
+        assertThrows(DOPOSoccerException.class, () -> juego.nuevoPartido("Por tiempo", 0));
     }
 
     @Test
@@ -128,5 +127,11 @@ public class DOPOSoccerTest {
         assertEquals(DOPOSoccer.EMPATE, juego.getGanador());
         assertEquals(25, juego.getPuntos(DOPOSoccer.IZQUIERDO));
         assertEquals(25, juego.getPuntos(DOPOSoccer.DERECHO));
+    }
+
+    @Test
+    public void noDeberiaCrearUnTipoDePartidoQueNoExiste() {
+        DOPOSoccerException e = assertThrows(DOPOSoccerException.class, () -> juego.nuevoPartido("Por penaltis", 3));
+        assertEquals(DOPOSoccerException.TIPO_DESCONOCIDO, e.getMessage());
     }
 }
