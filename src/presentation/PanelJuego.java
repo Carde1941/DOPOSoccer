@@ -86,6 +86,7 @@ public class PanelJuego extends JPanel {
 
     private void terminarJuego() {
         reloj.stop();
+        ventana.guardarProgreso();
         int ganador = juego.getGanador();
         String mensaje;
         if (ganador == DOPOSoccer.EMPATE){
@@ -96,8 +97,10 @@ public class PanelJuego extends JPanel {
             mensaje = "Ganó el jugador derecho";
         }
         mensaje += "\nMarcador: " + juego.getGoles(DOPOSoccer.IZQUIERDO) + "-" + juego.getGoles(DOPOSoccer.DERECHO);
-        mensaje += "\nPuntos jugador izquierdo: " + juego.getPuntos(DOPOSoccer.IZQUIERDO);
-        mensaje += "\nPuntos jugador derecho: " + juego.getPuntos(DOPOSoccer.DERECHO);
+        mensaje += "\nPuntos jugador izquierdo: " + juego.getPuntos(DOPOSoccer.IZQUIERDO)
+            + " (acumulados: " + juego.getPuntosAcumulados(DOPOSoccer.IZQUIERDO) + ")";
+        mensaje += "\nPuntos jugador derecho: " + juego.getPuntos(DOPOSoccer.DERECHO)
+            + " (acumulados: " + juego.getPuntosAcumulados(DOPOSoccer.DERECHO) + ")";
         JOptionPane.showMessageDialog(this, mensaje,"Fin del partido", JOptionPane.INFORMATION_MESSAGE);
         ventana.mostrar(DOPOSoccerGUI.MENU);
     }

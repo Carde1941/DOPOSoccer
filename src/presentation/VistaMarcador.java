@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import domain.DOPOSoccer;
+import domain.DOPOSoccerException;
 
 /** Hoja: el HUD de arriba con país, vida y poder de cada jugador, y el marcador en el centro. */
 public class VistaMarcador implements Vista {
@@ -21,7 +22,7 @@ public class VistaMarcador implements Vista {
     private static final int ANCHO_LADO = 420;
     private static final int ANCHO_CENTRO = 220;
     private static final int MARGEN = 16;
-    private static final int ALTO = 96;
+    private static final int ALTO = 114;
     private static final Font ESTADO = Estilo.NORMAL.deriveFont(14f);
     private static final String SIN_EFECTO = "Ninguno";
 
@@ -49,6 +50,23 @@ public class VistaMarcador implements Vista {
         double poder = juego.getProgresoPoder(lado);
         barra(g2, x + 18, MARGEN + 46, ANCHO_LADO - 36, 16, vida, VIDA, "VIDA", izquierdo);
         barra(g2, x + 18, MARGEN + 70, ANCHO_LADO - 36, 12, poder, poder >= 1 ? Estilo.AMARILLO : color, "PODER", izquierdo);
+        dibujarProgreso(g2, juego, lado, x, izquierdo);
+    }
+
+    private void dibujarProgreso(Graphics2D g2, DOPOSoccer juego, int lado, int x, boolean izquierdo) {
+        StringBuilder texto = new StringBuilder();
+        try {
+            for (String estadistica : juego.getEstadisticas()) {
+                texto.append(estadistica).append(" ").append(juego.getNivel(lado, estadistica)).append("   ");
+            }
+        } catch (DOPOSoccerException e) {
+            Log.record(e);
+        }
+        texto.append(juego.getPuntosAcumulados(lado)).append(" pts");
+        g2.setFont(ETIQUETA);
+        g2.setColor(Estilo.TEXTO);
+        int anchoTexto = g2.getFontMetrics().stringWidth(texto.toString());
+        g2.drawString(texto.toString(), izquierdo ? x + 18 : x + ANCHO_LADO - 18 - anchoTexto, MARGEN + 102);
     }
 
     /** Al otro lado del nombre: aturdido, el efecto que sufre, el aura activa o el poder listo con su tecla. */
