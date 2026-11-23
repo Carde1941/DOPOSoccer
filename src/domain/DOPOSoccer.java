@@ -15,6 +15,8 @@ public class DOPOSoccer {
     public static final int EMPATE = -1;
 
     private Partido partido;
+    private final Perfil[] perfiles = {new Perfil(), new Perfil()};
+    private boolean puntosEntregados;
 
     public List<String> getTiposPartido() {
         return Catalogo.getTiposPartido();
@@ -30,11 +32,14 @@ public class DOPOSoccer {
 
     public void nuevoPartido(String tipo, int cantidad) throws DOPOSoccerException {
         TipoPartido tipoPartido = Catalogo.crearTipoPartido(tipo, cantidad);
-        partido = new Partido(new Jugador(new Estadisticas()), new Jugador(new Estadisticas()), tipoPartido);
+        partido = new Partido(new Jugador(perfiles[IZQUIERDO].getEstadisticas()),
+            new Jugador(perfiles[DERECHO].getEstadisticas()), tipoPartido);
+        puntosEntregados = false;
     }
 
     public void actualizar(double segundos) {
         partido.actualizar(segundos);
+        entregarPuntos();
     }
 
     public void pausar() {
@@ -47,6 +52,7 @@ public class DOPOSoccer {
 
     public void terminar() {
         partido.terminar();
+        entregarPuntos();
     }
 
     public boolean estaPausado() {
@@ -253,6 +259,7 @@ public class DOPOSoccer {
                 throw new DOPOSoccerException(DOPOSoccerException.ARCHIVO_NO_ES_PARTIDA);
             }
             partido = (Partido) leido;
+            puntosEntregados = partido.haTerminado();
         } catch(IOException | ClassNotFoundException e){
             throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_ABRIR, e);
         }
@@ -271,5 +278,61 @@ public class DOPOSoccer {
 
     public boolean usaTeclado(int jugador){
         return jugador(jugador).usaTeclado();
+    }
+
+    public List<String> getEstadisticas(){
+        return perfiles[IZQUIERDO].getEstadisticas().getNombres();
+    }
+
+    public int getNivel(int jugador, String estadistica) throws DOPOSoccerException{
+        return perfiles[jugador].getEstadisticas().getNivel(estadistica);
+    }
+
+    public boolean estaAlMaximo(int jugador, String estadistica) throws DOPOSoccerException{
+        return perfiles[jugador].getEstadisticas().estaAlMaximo(estadistica);
+    }
+
+    public int getPrecioMejora(int jugador, String estadistica) throws DOPOSoccerException{
+        return perfiles[jugador].precioMejora(estadistica);
+    }
+
+    public void mejorar(int jugador, String estadistica) throws DOPOSoccerException{
+        perfiles[jugador].mejorar(estadistica);
+    }
+
+    public int getPuntosAcumulados(int jugador){
+        return perfiles[jugador].getPuntos();
+    }
+
+    public void guardarProgreso(File archivo) throws DOPOSoccerException{
+        try(FileOutputStream escritura = new FileOutputStream(archivo);
+            ObjectOutputStream salida = new ObjectOutputStream(escritura)){
+            salida.writeObject(perfiles);
+        } catch (IOException e){
+            throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_GUARDAR_PROGRESO, e);
+        }
+    }
+
+    public void abrirProgreso(File archivo) throws DOPOSoccerException{
+        try (FileInputStream lectura = new FileInputStream(archivo);
+            ObjectInputStream entrada = new ObjectInputStream(lectura)){
+            Object leido = entrada.readObject();
+            if (!(leido instanceof Perfil[]) || ((Perfil[]) leido).length != perfiles.length){
+                throw new DOPOSoccerException(DOPOSoccerException.ARCHIVO_NO_ES_PROGRESO);
+            }
+            Perfil[] leidos = (Perfil[]) leido;
+            perfiles[IZQUIERDO] = leidos[IZQUIERDO];
+            perfiles[DERECHO] = leidos[DERECHO];
+        } catch(IOException | ClassNotFoundException e){
+            throw new DOPOSoccerException(DOPOSoccerException.ERROR_AL_ABRIR_PROGRESO, e);
+        }
+    }
+
+    private void entregarPuntos(){
+        if (partido.haTerminado() && !puntosEntregados){
+            perfiles[IZQUIERDO].sumarPuntos(getPuntos(IZQUIERDO));
+            perfiles[DERECHO].sumarPuntos(getPuntos(DERECHO));
+            puntosEntregados = true;
+        }
     }
 }

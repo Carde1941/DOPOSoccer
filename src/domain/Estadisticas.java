@@ -1,72 +1,101 @@
 package domain;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Estadisticas implements Serializable{
-    private int speed;
-    private int kick;
-    private int jump;
-    private int survival;
+    public static final String SPEED = "Speed";
+    public static final String KICK = "Kick";
+    public static final String JUMP = "Jump";
+    public static final String SURVIVAL = "Survival";
     private static final int MINIMO =  1;
     private static final int MAXIMO = 10;
+    private final Map<String, Integer> niveles = new LinkedHashMap<>();
 
     public Estadisticas() {
-        this.speed = 1;
-        this.kick = 1;
-        this.jump = 1;
-        this.survival = 1;
+        niveles.put(SPEED, MINIMO);
+        niveles.put(KICK, MINIMO);
+        niveles.put(JUMP, MINIMO);
+        niveles.put(SURVIVAL, MINIMO);
     }
 
     public double multiplicadorSpeed(){
-        return 1 + 0.10 * (speed - 1);
+        return multiplicador(SPEED);
     }
 
     public double multiplicadorJump(){
-        return 1 + 0.10 * (jump - 1);
+        return multiplicador(JUMP);
     }
 
     public double multiplicadorKick() {
-        return 1 + 0.10 * (kick - 1);
+        return multiplicador(KICK);
     }
 
     public double vidaMaxima() {
-        return 100 * (1 + 0.10 * (survival - 1));
+        return 100 * multiplicador(SURVIVAL);
     }
 
     public void setSpeed(int valor)  throws DOPOSoccerException{
-        validar(valor);
-        this.speed = valor;
+        poner(SPEED, valor);
     }
 
     public void setKick(int valor) throws DOPOSoccerException {
-        validar(valor);
-        this.kick=valor;
-
+        poner(KICK, valor);
     }
 
     public void setJump(int valor) throws DOPOSoccerException {
-        validar(valor);
-        this.jump = valor;
+        poner(JUMP, valor);
     }
 
     public void setSurvival(int valor) throws DOPOSoccerException {
-        validar(valor);
-        this.survival = valor;
+        poner(SURVIVAL, valor);
     }
 
     public int getSpeed(){
-        return speed;
+        return niveles.get(SPEED);
     }
 
     public int getKick(){
-        return kick;
+        return niveles.get(KICK);
     }
 
     public int getJump(){
-        return jump;
+        return niveles.get(JUMP);
     }
 
     public int getSurvival(){
-        return survival;
+        return niveles.get(SURVIVAL);
+    }
+
+    public List<String> getNombres(){
+        return new ArrayList<>(niveles.keySet());
+    }
+
+    public int getNivel(String nombre) throws DOPOSoccerException {
+        Integer nivel = niveles.get(nombre);
+        if (nivel == null) {
+            throw new DOPOSoccerException(DOPOSoccerException.ESTADISTICA_DESCONOCIDA);
+        }
+        return nivel;
+    }
+
+    public boolean estaAlMaximo(String nombre) throws DOPOSoccerException {
+        return getNivel(nombre) == MAXIMO;
+    }
+
+    public void subir(String nombre) throws DOPOSoccerException {
+        poner(nombre, getNivel(nombre) + 1);
+    }
+
+    private double multiplicador(String nombre){
+        return 1 + 0.10 * (niveles.get(nombre) - 1);
+    }
+
+    private void poner(String nombre, int valor) throws DOPOSoccerException {
+        validar(valor);
+        niveles.put(nombre, valor);
     }
 
     private void validar(int valor) throws DOPOSoccerException {

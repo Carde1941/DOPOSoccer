@@ -22,7 +22,7 @@ public class TarjetaJugador extends PanelNeon {
     private Figura figura;
     private JLabel poder;
 
-    public TarjetaJugador(String titulo, Pais inicial, Color color, boolean mirandoDerecha) {
+    public TarjetaJugador(String titulo, Pais inicial, Color color, boolean mirandoDerecha, DOPOSoccerGUI ventana, int lado) {
         super(color);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -48,6 +48,12 @@ public class TarjetaJugador extends PanelNeon {
         info.addActionListener(e -> new DialogoPoder(this, getPais(), color).setVisible(true));
         c.fill = GridBagConstraints.NONE;
         add(info, c);
+
+        BotonJuego mejoras = new BotonJuego("Mejorar estadísticas", color);
+        mejoras.setFont(Estilo.BOTON.deriveFont(13f));
+        mejoras.setPreferredSize(new Dimension(220, 34));
+        mejoras.addActionListener(e -> new DialogoMejoras(this, ventana, lado, titulo, color).setVisible(true));
+        add(mejoras, c);
 
         mostrarPais();
     }

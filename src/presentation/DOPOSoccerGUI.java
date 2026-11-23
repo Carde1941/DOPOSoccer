@@ -2,6 +2,7 @@ package presentation;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,6 +16,7 @@ import domain.DOPOSoccerException;
 public class DOPOSoccerGUI extends JFrame {
     public static final String MENU = "menu";
     public static final String PICADITO = "picadito";
+    private static final File PROGRESO = new File(System.getProperty("user.home"), "DOPOSoccer.progreso");
 
     private DOPOSoccer juego = new DOPOSoccer();
     private CardLayout tarjetas = new CardLayout();
@@ -24,6 +26,7 @@ public class DOPOSoccerGUI extends JFrame {
     public DOPOSoccerGUI() {
         super("DOPOSoccer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        abrirProgreso();
         pantallas.setPreferredSize(new Dimension(960, 540));
         pantallas.add(new PantallaMenu(this), MENU);
         pantallas.add(new PantallaPicadito(this), PICADITO);
@@ -63,6 +66,26 @@ public class DOPOSoccerGUI extends JFrame {
         pack();
         setLocationRelativeTo(null);
         panel.iniciar();
+    }
+
+    public void guardarProgreso() {
+        try {
+            juego.guardarProgreso(PROGRESO);
+        } catch (DOPOSoccerException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Progreso", JOptionPane.ERROR_MESSAGE);
+            Log.record(e);
+        }
+    }
+
+    private void abrirProgreso() {
+        if (!PROGRESO.exists()) {
+            return;
+        }
+        try {
+            juego.abrirProgreso(PROGRESO);
+        } catch (DOPOSoccerException e) {
+            Log.record(e);
+        }
     }
 
     public ConfiguracionPartido getConfiguracion() {

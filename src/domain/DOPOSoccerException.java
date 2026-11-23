@@ -11,6 +11,12 @@ public class DOPOSoccerException extends Exception {
     public static final String MAQUINA_DESCONOCIDA = "El perfil de maquina escogido no existe.";
     public static final String TIPO_DESCONOCIDO = "El tipo de partido elegido no existe.";
     public static final String PERSONAJE_DESCONOCIDO = "El personaje elegido no existe.";
+    public static final String ESTADISTICA_DESCONOCIDA = "La estadística elegida no existe.";
+    public static final String ESTADISTICA_AL_MAXIMO = "Esa estadística ya está en el nivel máximo (10).";
+    public static final String PUNTOS_INSUFICIENTES = "No tienes puntos suficientes para esa mejora.";
+    public static final String ERROR_AL_GUARDAR_PROGRESO = "No se pudo guardar el progreso de los jugadores.";
+    public static final String ERROR_AL_ABRIR_PROGRESO = "No se pudo abrir el progreso de los jugadores.";
+    public static final String ARCHIVO_NO_ES_PROGRESO = "El archivo no tiene el progreso de DOPOSoccer.";
 
     public DOPOSoccerException(String message) {
         super(message);
