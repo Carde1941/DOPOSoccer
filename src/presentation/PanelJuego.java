@@ -44,16 +44,16 @@ public class PanelJuego extends JPanel {
         .agregar(new VistaMarcador())
         .agregar(new VistaPausa());
     setFocusable(true);
-        agregarControles(DOPOSoccer.IZQUIERDO, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_SPACE, KeyEvent.VK_S);
-        agregarControles(DOPOSoccer.DERECHO, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_K, KeyEvent.VK_DOWN);
+        agregarControles(Controles.izquierdo());
+        agregarControles(Controles.derecho());
 
         addKeyListener(new ControlTeclado());
         reloj = new Timer(MILISEGUNDOS_POR_CUADRO, e -> ciclo());
     }
 
-    private void agregarControles(int jugador, int izquierda, int derecha, int saltar, int patear, int poder) {
-        if (juego.usaTeclado(jugador)) {
-            controles.add(new Controles(jugador, izquierda, derecha, saltar, patear, poder));
+    private void agregarControles(Controles control) {
+        if (juego.usaTeclado(control.getJugador())) {
+            controles.add(control);
         }
     }
 
@@ -160,12 +160,12 @@ public class PanelJuego extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
             int tecla = e.getKeyCode();
-            if (tecla == KeyEvent.VK_P){
+            if (tecla == Controles.PAUSA){
                 cambiarPausa();
-            } else if (tecla == KeyEvent.VK_ESCAPE){
+            } else if (tecla == Controles.TERMINAR){
                 confirmarTerminar();
             } 
-            else if (tecla == KeyEvent.VK_G && juego.estaPausado()) {
+            else if (tecla == Controles.GUARDAR && juego.estaPausado()) {
                 guardar();
             }
             else{
