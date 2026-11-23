@@ -96,7 +96,7 @@ public class VistaMarcador implements Vista {
     }
 
     private String teclaPoder(int lado) {
-        return lado == DOPOSoccer.IZQUIERDO ? "S" : "↓";
+        return Controles.de(lado).getTeclas().get(Controles.PODER);
     }
 
     private void dibujarCentro(Graphics2D g2, DOPOSoccer juego, int x) {
