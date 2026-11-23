@@ -7,8 +7,14 @@ import java.awt.image.BufferedImage;
 
 import domain.DOPOSoccer;
 
-/** Hoja: el fondo de la cancha. El piso de la imagen coincide con el suelo del dominio. */
+/**
+ * Hoja: el fondo de la cancha. La imagen ya trae los arcos pintados y su piso coincide con el suelo del dominio.
+ * Si la imagen no carga, se pinta un fondo plano y los arcos se dibujan con VistaArco.
+ */
 public class VistaCancha implements Vista {
+    private final Vista arcos = new VistaCompuesta()
+        .agregar(new VistaArco(DOPOSoccer.IZQUIERDO))
+        .agregar(new VistaArco(DOPOSoccer.DERECHO));
 
     @Override
     public void dibujar(Graphics2D g2, DOPOSoccer juego) {
@@ -24,6 +30,7 @@ public class VistaCancha implements Vista {
             g2.fillRect(0, 0, ancho, suelo);
             g2.setColor(new Color(40, 150, 160));
             g2.fillRect(0, suelo, ancho, alto - suelo);
+            arcos.dibujar(g2, juego);
         }
     }
 }

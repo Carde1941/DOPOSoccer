@@ -36,8 +36,6 @@ public class PanelJuego extends JPanel {
     setPreferredSize(new Dimension(configuracion.getAncho(), configuracion.getAlto()));
     escena = new VistaCompuesta()
         .agregar(new VistaCancha())
-        .agregar(new VistaArco(DOPOSoccer.IZQUIERDO))
-        .agregar(new VistaArco(DOPOSoccer.DERECHO))
         .agregar(new VistaJugador(DOPOSoccer.IZQUIERDO))
         .agregar(new VistaJugador(DOPOSoccer.DERECHO))
         .agregar(new VistaBalon())
