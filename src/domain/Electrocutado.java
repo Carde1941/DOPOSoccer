@@ -1,10 +1,11 @@
 package domain;
 
-/** Rayo: el rival no puede saltar y se mueve a la mitad de su velocidad. */
+/** El efecto del Rayo de Camerún: el rival no puede saltar y camina a la mitad de su velocidad. */
 public class Electrocutado extends Efecto{
     private static final double DURACION = 3;
     private static final double FACTOR_VELOCIDAD = 0.5;
 
+    /** Crea el efecto con su duración. */
     public Electrocutado(){
         super(DURACION);
     }

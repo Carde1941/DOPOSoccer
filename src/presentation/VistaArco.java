@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import domain.DOPOSoccer;
 
-/** Hoja: un arco con malla y postes a rayas, del tamaño que dice el dominio. */
+/** Dibuja un arco con su malla y sus postes. */
 public class VistaArco implements Vista {
     private static final Color MALLA = new Color(230, 230, 240, 150);
     private static final Color ROJO = new Color(225, 40, 50);
@@ -14,6 +14,11 @@ public class VistaArco implements Vista {
     private static final int RAYA = 22;
     private int lado;
 
+    /**
+     * Crea el dibujo del arco.
+     *
+     * @param lado el arco: DOPOSoccer.IZQUIERDO o DOPOSoccer.DERECHO
+     */
     public VistaArco(int lado) {
         this.lado = lado;
     }
@@ -45,4 +50,4 @@ public class VistaArco implements Vista {
             g2.fillRect(i, arriba - GROSOR / 2, Math.min(RAYA, x + ancho - i), GROSOR);
         }
     }
-}
+}

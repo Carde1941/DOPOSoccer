@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
+/** Ventana para gastar los puntos de un jugador subiendo sus estadísticas. */
 public class DialogoMejoras extends JDialog {
     private DOPOSoccerGUI ventana;
     private int lado;
@@ -28,6 +29,15 @@ public class DialogoMejoras extends JDialog {
     private Map<String, JLabel> niveles = new LinkedHashMap<>();
     private Map<String, BotonJuego> botones = new LinkedHashMap<>();
 
+    /**
+     * Crea la ventana.
+     *
+     * @param origen desde dónde se abre la ventana, para que salga encima
+     * @param ventana la ventana principal del juego
+     * @param lado el lado del jugador: DOPOSoccer.IZQUIERDO o DOPOSoccer.DERECHO
+     * @param titulo el nombre del jugador, por ejemplo "Jugador 1"
+     * @param color el color del jugador en la pantalla
+     */
     public DialogoMejoras(Component origen, DOPOSoccerGUI ventana, int lado, String titulo, Color color) {
         super(SwingUtilities.getWindowAncestor(origen), "Mejoras", Dialog.ModalityType.APPLICATION_MODAL);
         this.ventana = ventana;

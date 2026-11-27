@@ -6,10 +6,16 @@ import java.util.List;
 
 import domain.DOPOSoccer;
 
-/** Composite: un grupo de vistas que se dibujan en orden, de atrás hacia adelante. */
+/** Un grupo de cosas para dibujar, en orden, de atrás hacia adelante. */
 public class VistaCompuesta implements Vista {
     private List<Vista> vistas = new ArrayList<>();
 
+    /**
+     * Agrega algo al grupo. Se dibuja encima de lo que ya estaba.
+     *
+     * @param vista lo que se agrega
+     * @return este mismo grupo, para seguir agregando
+     */
     public VistaCompuesta agregar(Vista vista) {
         vistas.add(vista);
         return this;
@@ -21,4 +27,4 @@ public class VistaCompuesta implements Vista {
             vista.dibujar(g2, juego);
         }
     }
-}
+}

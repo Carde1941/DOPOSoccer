@@ -1,8 +1,12 @@
 package domain;
 
-/** Null Object: el jugador no está bajo ningún efecto. */
+/**
+ * Cuando el jugador no tiene ningún efecto encima. Así el jugador siempre tiene un efecto y nunca hay
+ * que preguntar si es null.
+ */
 public class SinEfecto extends Efecto{
 
+    /** Crea el efecto vacío. */
     public SinEfecto(){
         super(0);
     }
@@ -17,6 +21,11 @@ public class SinEfecto extends Efecto{
         return "Ninguno";
     }
 
+    /**
+     * Nunca termina: el jugador se queda así hasta que lo golpee un poder.
+     *
+     * @return siempre false
+     */
     @Override
     public boolean haTerminado(){
         return false;

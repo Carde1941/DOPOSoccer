@@ -13,8 +13,14 @@ import javax.swing.JOptionPane;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
+/**
+ * La ventana del juego. Cambia entre el menú, la pantalla de configuración y el partido, y guarda el
+ * progreso de los jugadores.
+ */
 public class DOPOSoccerGUI extends JFrame {
+    /** El nombre de la pantalla del menú. */
     public static final String MENU = "menu";
+    /** El nombre de la pantalla "Arma el picadito". */
     public static final String PICADITO = "picadito";
     private static final File PROGRESO = new File(System.getProperty("user.home"), "DOPOSoccer.progreso");
 
@@ -23,6 +29,7 @@ public class DOPOSoccerGUI extends JFrame {
     private JPanel pantallas = new JPanel(tarjetas);
     private ConfiguracionPartido configuracion = new ConfiguracionPartido();
 
+    /** Crea la ventana, carga el progreso guardado y muestra el menú. */
     public DOPOSoccerGUI() {
         super("DOPOSoccer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,6 +40,11 @@ public class DOPOSoccerGUI extends JFrame {
         mostrar(MENU);
     }
 
+    /**
+     * Muestra una de las pantallas.
+     *
+     * @param pantalla MENU o PICADITO
+     */
     public void mostrar(String pantalla) {
         setContentPane(pantallas);
         tarjetas.show(pantallas, pantalla);
@@ -40,11 +52,17 @@ public class DOPOSoccerGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Crea el partido con lo que se escogió y lo empieza.
+     *
+     * @throws DOPOSoccerException si algo de lo escogido no existe
+     */
     public void iniciarPartido() throws DOPOSoccerException {
     configuracion.construir(juego);
     mostrarJuego();
     }
 
+    /** Pide un archivo y abre la partida guardada. Si falla, muestra el error. */
     public void abrirPartido(){
         JFileChooser selector = new JFileChooser();
         if (selector.showOpenDialog(this) != JFileChooser.APPROVE_OPTION ){
@@ -68,6 +86,7 @@ public class DOPOSoccerGUI extends JFrame {
         panel.iniciar();
     }
 
+    /** Guarda los puntos y las mejoras de los jugadores. Si falla, muestra el error. */
     public void guardarProgreso() {
         try {
             juego.guardarProgreso(PROGRESO);
@@ -88,19 +107,35 @@ public class DOPOSoccerGUI extends JFrame {
         }
     }
 
+    /**
+     * Lo que se escogió en la pantalla de configuración.
+     *
+     * @return la configuración
+     */
     public ConfiguracionPartido getConfiguracion() {
     return configuracion;
     }
 
+    /** Cierra el juego. */
     public void salir() {
         dispose();
     }
 
+    /**
+     * El juego.
+     *
+     * @return el juego
+     */
     public DOPOSoccer getJuego() {
         return juego;
     }
 
+    /**
+     * Abre el juego.
+     *
+     * @param args no se usan
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new DOPOSoccerGUI().setVisible(true));
     }
-}
+}

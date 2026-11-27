@@ -7,10 +7,7 @@ import java.awt.image.BufferedImage;
 
 import domain.DOPOSoccer;
 
-/**
- * Hoja: el fondo de la cancha. La imagen ya trae los arcos pintados y su piso coincide con el suelo del dominio.
- * Si la imagen no carga, se pinta un fondo plano y los arcos se dibujan con VistaArco.
- */
+/** Dibuja el fondo de la cancha. */
 public class VistaCancha implements Vista {
     private final Vista arcos = new VistaCompuesta()
         .agregar(new VistaArco(DOPOSoccer.IZQUIERDO))
@@ -33,4 +30,4 @@ public class VistaCancha implements Vista {
             arcos.dibujar(g2, juego);
         }
     }
-}
+}

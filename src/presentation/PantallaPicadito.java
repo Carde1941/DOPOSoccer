@@ -17,7 +17,10 @@ import javax.swing.SwingConstants;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
-/** "Arma el picadito": cada jugador elige país y en el centro se definen las reglas. */
+/**
+ * La pantalla "Arma el picadito": cada jugador escoge su personaje y en el centro se escogen las
+ * reglas del partido.
+ */
 public class PantallaPicadito extends PanelConFondo {
     private static final String JUGADOR_VS_JUGADOR = "Jugador vs Jugador";
     private static final String JUGADOR_VS_MAQUINA = "Jugador vs Máquina";
@@ -41,6 +44,11 @@ public class PantallaPicadito extends PanelConFondo {
     private BotonJuego aLaCancha;
     private JLabel aviso;
 
+    /**
+     * Crea la pantalla.
+     *
+     * @param ventana la ventana principal del juego
+     */
     public PantallaPicadito(DOPOSoccerGUI ventana) {
         super("DSFondo.png", true);
         this.ventana = ventana;
@@ -186,4 +194,4 @@ public class PantallaPicadito extends PanelConFondo {
             return ancho + " x " + alto;
         }
     }
-}
+}

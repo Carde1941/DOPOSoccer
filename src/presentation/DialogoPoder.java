@@ -18,9 +18,21 @@ import javax.swing.SwingUtilities;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
-/** Ventanita que explica el tiro de poder de un personaje. */
+/**
+ * Ventana que explica el poder de un personaje: cómo sale el tiro, qué le hace al rival, cuánto dura y
+ * cuánto daño hace.
+ */
 public class DialogoPoder extends JDialog {
 
+    /**
+     * Crea la ventana.
+     *
+     * @param origen desde dónde se abre la ventana, para que salga encima
+     * @param juego el juego; la pantalla le pide a él toda la información
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @param color el color del jugador en la pantalla
+     * @throws DOPOSoccerException si el personaje no existe
+     */
     public DialogoPoder(Component origen, DOPOSoccer juego, String personaje, Color color) throws DOPOSoccerException {
         super(SwingUtilities.getWindowAncestor(origen), juego.getNombrePoder(personaje), Dialog.ModalityType.APPLICATION_MODAL);
         setUndecorated(true);
@@ -65,4 +77,4 @@ public class DialogoPoder extends JDialog {
         l.setForeground(color);
         return l;
     }
-}
+}

@@ -9,12 +9,17 @@ import java.awt.RenderingHints;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-/** Panel oscuro semitransparente con borde de color redondeado. */
+/** Recuadro oscuro y semitransparente con un borde de color. */
 public class PanelNeon extends JPanel {
     private static final int ARCO = 22;
     private static final int BORDE = 3;
     private Color color;
 
+    /**
+     * Crea el recuadro.
+     *
+     * @param color el color del borde
+     */
     public PanelNeon(Color color) {
         this.color = color;
         setOpaque(false);
@@ -33,4 +38,4 @@ public class PanelNeon extends JPanel {
         g2.dispose();
         super.paintComponent(g);
     }
-}
+}

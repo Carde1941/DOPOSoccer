@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
+/** Carga la letra del juego. Si no la encuentra, usa una normal. */
 public final class Fuentes {
     private static final String ARCHIVO = "fuentes/Bungee-Regular.ttf";
     private static final Logger LOG = Logger.getLogger(Fuentes.class.getName());
@@ -14,6 +15,12 @@ public final class Fuentes {
     private Fuentes() {
     }
 
+    /**
+     * La letra del juego en un tamaño.
+     *
+     * @param tamano el tamaño
+     * @return la letra
+     */
     public static Font juego(float tamano) {
         if (base == null) {
             base = cargar();
@@ -32,4 +39,4 @@ public final class Fuentes {
         }
         return new Font("SansSerif", Font.BOLD, 12);
     }
-}
+}

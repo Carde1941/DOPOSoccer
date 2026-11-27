@@ -1,8 +1,9 @@
 package domain;
 
 /**
- * Decide según el estado del partido: defiende si va ganando por 2 goles o si el rival la amenaza con su poder,
- * y si no, ataca. Guarda el poder hasta que el balón está en la mitad del rival.
+ * Máquina que cambia de plan según el partido: defiende si va ganando por dos goles o más, o si el
+ * rival tiene el poder activado o ya lo lanzó. Si no, ataca y usa su poder cuando el balón está lejos
+ * de su arco.
  */
 public class Experta extends Maquina{
     private static final int VENTAJA_PARA_DEFENDER = 2;

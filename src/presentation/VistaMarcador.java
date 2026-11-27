@@ -10,7 +10,10 @@ import java.awt.RenderingHints;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
-/** Hoja: el HUD de arriba con país, vida y poder de cada jugador, y el marcador en el centro. */
+/**
+ * Dibuja la parte de arriba de la pantalla: el personaje, la vida y el poder de cada jugador, y en el
+ * centro el marcador.
+ */
 public class VistaMarcador implements Vista {
     private static final Color CAJA = new Color(20, 10, 40, 215);
     private static final Color VACIO = new Color(60, 45, 90);
@@ -147,4 +150,4 @@ public class VistaMarcador implements Vista {
         g2.setColor(color);
         g2.drawString(texto, x + (ancho - anchoTexto) / 2, y);
     }
-}
+}

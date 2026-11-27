@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import domain.DOPOSoccer;
 
-/** Hoja: oscurece la cancha y muestra PAUSA cuando el partido está pausado. */
+/** Oscurece la cancha y muestra la pausa con las teclas de cada jugador. */
 public class VistaPausa implements Vista {
     private static final Font GRANDE = Fuentes.juego(96f);
     private static final Font PEQUENA = Estilo.NORMAL.deriveFont(24f);
@@ -34,4 +34,4 @@ public class VistaPausa implements Vista {
         g2.setColor(color);
         g2.drawString(texto, x, y);
     }
-}
+}
