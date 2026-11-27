@@ -5,6 +5,11 @@ import java.awt.image.BufferedImage;
 import java.text.Normalizer;
 import java.util.Map;
 
+/**
+ * Cómo se ve cada personaje: sus imágenes y el color de su aura. Las imágenes se buscan con el nombre
+ * del personaje en minúsculas, sin tildes y con guiones; si un personaje no tiene las suyas, se usa
+ * una genérica.
+ */
 public final class Apariencia {
     private static final Color AURA_POR_DEFECTO = Color.WHITE;
     private static final String GENERICA = "generico.png";
@@ -17,18 +22,42 @@ public final class Apariencia {
     private Apariencia() {
     }
 
+    /**
+     * El color del aura de un personaje.
+     *
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @return su color, o blanco si no tiene uno
+     */
     public static Color aura(String personaje) {
         return AURAS.getOrDefault(personaje, AURA_POR_DEFECTO);
     }
 
+    /**
+     * La imagen de cuerpo completo del personaje, la que sale en las tarjetas.
+     *
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @return la imagen
+     */
     public static BufferedImage cuerpo(String personaje) {
         return imagen("personajes/", personaje);
     }
 
+    /**
+     * La cabeza del personaje, la que se ve en la cancha.
+     *
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @return la imagen
+     */
     public static BufferedImage cabeza(String personaje) {
         return imagen("cabezas/", personaje);
     }
 
+    /**
+     * El guayo del personaje.
+     *
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @return la imagen
+     */
     public static BufferedImage guayo(String personaje) {
         return imagen("guayos/", personaje);
     }

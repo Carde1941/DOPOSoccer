@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+/** Carga las imágenes del juego y las guarda para no leerlas dos veces. */
 public final class Imagenes {
     private static final String CARPETA = "imagenes/";
     private static final Logger LOG = Logger.getLogger(Imagenes.class.getName());
@@ -17,6 +18,12 @@ public final class Imagenes {
     private Imagenes() {
     }
 
+    /**
+     * Busca una imagen dentro de la carpeta de imágenes.
+     *
+     * @param nombre la ruta de la imagen dentro de la carpeta, por ejemplo "cabezas/nigeria.png"
+     * @return la imagen, o null si no existe
+     */
     public static BufferedImage get(String nombre) {
         if (CACHE.containsKey(nombre)) {
             return CACHE.get(nombre);
@@ -34,4 +41,4 @@ public final class Imagenes {
         CACHE.put(nombre, imagen);
         return imagen;
     }
-}
+}

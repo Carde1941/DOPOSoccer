@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+/** Anota los errores en el archivo DOPOSoccer.log, con todo el detalle, para poder revisarlos después. */
 public class Log {
     private static final String ARCHIVO = "DOPOSoccer.log";
     private static final Logger REGISTRO = Logger.getLogger("DOPOSoccer");
@@ -13,6 +14,11 @@ public class Log {
     private Log(){        
     }
 
+    /**
+     * Anota un error en el archivo.
+     *
+     * @param e el error
+     */
     public static void record(Exception e){
         try{
             FileHandler archivo = new FileHandler(ARCHIVO, true);

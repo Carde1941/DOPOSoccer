@@ -2,6 +2,7 @@ package domain;
 
 import java.util.List;
 
+/** Crea partidos que se ganan llegando a cierta cantidad de goles. */
 public class CreadorPorGoles implements CreadorTipoPartido {
     @Override
     public TipoPartido crear(int goles) throws DOPOSoccerException {
@@ -17,4 +18,4 @@ public class CreadorPorGoles implements CreadorTipoPartido {
     public String describir(int goles) {
         return goles + (goles == 1 ? " gol" : " goles");
     }
-}
+}

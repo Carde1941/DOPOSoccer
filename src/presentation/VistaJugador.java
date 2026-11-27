@@ -10,7 +10,10 @@ import java.util.Set;
 
 import domain.DOPOSoccer;
 
-/** Hoja: el personaje de un jugador con su aura, dormido si está noqueado y con el adorno de su efecto. */
+/**
+ * Dibuja a un jugador con su aura cuando tiene el poder activado, acostado si está aturdido o
+ * inconsciente, y con el adorno de su efecto.
+ */
 public class VistaJugador implements Vista {
     private static final double ESCALA = 1.3;
     private static final Font LETRA_ZZZ = Fuentes.juego(26f);
@@ -22,6 +25,11 @@ public class VistaJugador implements Vista {
         "Empuje", VistaJugador::rafagas);
     private int lado;
 
+    /**
+     * Crea el dibujo del jugador.
+     *
+     * @param lado el lado del jugador: DOPOSoccer.IZQUIERDO o DOPOSoccer.DERECHO
+     */
     public VistaJugador(int lado) {
         this.lado = lado;
     }

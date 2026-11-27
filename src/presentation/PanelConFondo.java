@@ -9,11 +9,18 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+/** Pantalla con una imagen de fondo. */
 public class PanelConFondo extends JPanel {
     private static final Color VELO = new Color(10, 30, 60, 140);
     private String imagen;
     private boolean conVelo;
 
+    /**
+     * Crea la pantalla.
+     *
+     * @param imagen el nombre de la imagen de fondo
+     * @param conVelo true para oscurecer un poco el fondo y que se lea mejor lo de encima
+     */
     public PanelConFondo(String imagen, boolean conVelo) {
         this.imagen = imagen;
         this.conVelo = conVelo;
@@ -43,4 +50,4 @@ public class PanelConFondo extends JPanel {
         }
         g2.dispose();
     }
-}
+}

@@ -2,6 +2,7 @@ package domain;
 
 import java.util.List;
 
+/** Crea partidos que duran cierta cantidad de minutos. */
 public class CreadorPorTiempo implements CreadorTipoPartido {
     @Override
     public TipoPartido crear(int minutos) throws DOPOSoccerException {
@@ -17,4 +18,4 @@ public class CreadorPorTiempo implements CreadorTipoPartido {
     public String describir(int minutos) {
         return minutos + (minutos == 1 ? " minuto" : " minutos");
     }
-}
+}

@@ -4,6 +4,11 @@ package domain;
 public class TiroRecto implements Tiro {
     private final double velocidad;
 
+    /**
+     * Crea el tiro.
+     *
+     * @param velocidad qué tan rápido sale
+     */
     public TiroRecto(double velocidad){
         this.velocidad = velocidad;
     }

@@ -2,15 +2,18 @@ package presentation;
 
 import java.awt.Graphics2D;
 
-/** Strategy: cómo se dibuja sobre el personaje el efecto que le dejó un tiro de poder. */
+/** Lo que se dibuja encima de un personaje según el efecto que tenga, como los rayos del electrocutado. */
 @FunctionalInterface
 public interface AdornoEfecto {
     /**
-     * @param centro x del centro del personaje
-     * @param arriba y de la parte de arriba de su caja
-     * @param ancho  ancho de su caja
-     * @param alto   alto de su caja
-     * @param tiempo segundos que lleva el juego, para animar
+     * Dibuja el adorno alrededor del personaje.
+     *
+     * @param g2 donde se dibuja
+     * @param centro el centro del personaje, de izquierda a derecha
+     * @param arriba dónde empieza el personaje, de arriba hacia abajo
+     * @param ancho el ancho del personaje
+     * @param alto el alto del personaje
+     * @param tiempo los segundos que llevan corriendo, para animar
      */
     void dibujar(Graphics2D g2, int centro, int arriba, int ancho, int alto, double tiempo);
 }

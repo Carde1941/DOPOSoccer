@@ -17,6 +17,7 @@ import javax.swing.JFileChooser;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
+/** La pantalla del partido. Escucha el teclado, avanza el juego unas 60 veces por segundo y lo dibuja. */
 public class PanelJuego extends JPanel {
     private static final int MILISEGUNDOS_POR_CUADRO = 16;
     private static final double MAXIMO_SEGUNDOS_POR_CUADRO = 0.05;
@@ -30,6 +31,13 @@ public class PanelJuego extends JPanel {
     private Vista escena;
 
 
+    /**
+     * Crea la pantalla del partido.
+     *
+     * @param ventana la ventana principal del juego
+     * @param juego el juego; la pantalla le pide a él toda la información
+     * @param configuracion lo que se escogió en la pantalla de configuración
+     */
     public PanelJuego(DOPOSoccerGUI ventana, DOPOSoccer juego, ConfiguracionPartido configuracion) {
     this.ventana = ventana;
     this.juego = juego;
@@ -61,6 +69,7 @@ public class PanelJuego extends JPanel {
         }
     }
 
+    /** Arranca el partido. */
     public void iniciar() {
         ultimoInstante = System.nanoTime();
         reloj.start();
@@ -180,4 +189,4 @@ public class PanelJuego extends JPanel {
             }
             }
         }
-}
+}

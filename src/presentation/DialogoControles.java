@@ -25,8 +25,15 @@ import javax.swing.SwingUtilities;
 
 import domain.DOPOSoccer;
 
+/** Ventana que muestra las teclas de cada jugador al lado de un personaje de ejemplo. */
 public class DialogoControles extends JDialog {
 
+    /**
+     * Crea la ventana.
+     *
+     * @param origen desde dónde se abre la ventana, para que salga encima
+     * @param juego el juego; la pantalla le pide a él toda la información
+     */
     public DialogoControles(Component origen, DOPOSoccer juego) {
         super(SwingUtilities.getWindowAncestor(origen), "Controles", Dialog.ModalityType.APPLICATION_MODAL);
         setUndecorated(true);

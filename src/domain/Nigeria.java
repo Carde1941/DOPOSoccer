@@ -1,5 +1,6 @@
 package domain;
 
+/** Nigeria. Su poder, el Tornado, sale en parábola y deja al rival inconsciente. */
 public class Nigeria extends Personaje{
     private static final double DANO_TIRO = 40;
     private static final double TIRO_VX = 900;

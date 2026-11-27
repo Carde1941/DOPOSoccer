@@ -1,6 +1,6 @@
 package domain;
 
-/** Null Object: una superficie que no frena nada. */
+/** Una superficie que no frena nada, como el aire. */
 public class SinFriccion implements Friccion {
     @Override
     public double frenar(double velocidad, double segundos) {

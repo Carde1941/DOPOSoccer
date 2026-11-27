@@ -8,10 +8,15 @@ import java.awt.RenderingHints;
 
 import javax.swing.JComponent;
 
-/** Texto grande con contorno, en el color del acento. */
+/** Texto grande con contorno, para los títulos de las pantallas. */
 public class Titulo extends JComponent {
     private String texto;
 
+    /**
+     * Crea el título.
+     *
+     * @param texto lo que dice
+     */
     public Titulo(String texto) {
         this.texto = texto.toUpperCase();
         setFont(Estilo.TITULO);
@@ -36,4 +41,4 @@ public class Titulo extends JComponent {
         g2.drawString(texto, x, y);
         g2.dispose();
     }
-}
+}

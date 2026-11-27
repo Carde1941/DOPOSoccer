@@ -19,13 +19,26 @@ import javax.swing.SwingConstants;
 import domain.DOPOSoccer;
 import domain.DOPOSoccerException;
 
-/** Columna de un jugador: nombre, personaje, selector de país y su poder. */
+/**
+ * La columna de un jugador en "Arma el picadito": su nombre, la imagen del personaje, el selector, su
+ * poder y el botón de mejoras.
+ */
 public class TarjetaJugador extends PanelNeon {
     private DOPOSoccer juego;
     private Selector<String> personaje;
     private Figura figura;
     private JLabel poder;
 
+    /**
+     * Crea la tarjeta.
+     *
+     * @param titulo el nombre del jugador, por ejemplo "Jugador 1"
+     * @param inicial la posición en la lista del personaje que sale escogido al principio
+     * @param color el color del jugador en la pantalla
+     * @param mirandoDerecha true si el personaje mira hacia la derecha
+     * @param ventana la ventana principal del juego
+     * @param lado el lado del jugador: DOPOSoccer.IZQUIERDO o DOPOSoccer.DERECHO
+     */
     public TarjetaJugador(String titulo, int inicial, Color color, boolean mirandoDerecha, DOPOSoccerGUI ventana, int lado) {
         super(color);
         juego = ventana.getJuego();
@@ -64,6 +77,11 @@ public class TarjetaJugador extends PanelNeon {
         mostrarPersonaje();
     }
 
+    /**
+     * El personaje escogido.
+     *
+     * @return el nombre del personaje
+     */
     public String getPersonaje() {
         return personaje.getValor();
     }
@@ -120,4 +138,4 @@ public class TarjetaJugador extends PanelNeon {
             g2.dispose();
         }
     }
-}
+}

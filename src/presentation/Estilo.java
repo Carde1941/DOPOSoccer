@@ -3,6 +3,7 @@ package presentation;
 import java.awt.Color;
 import java.awt.Font;
 
+/** Los colores y letras del juego, todos en un solo lugar. */
 public final class Estilo {
     public static final Color FONDO = new Color(28, 16, 56);
     public static final Color PANEL = new Color(52, 30, 92);
@@ -23,4 +24,4 @@ public final class Estilo {
 
     private Estilo() {
     }
-}
+}

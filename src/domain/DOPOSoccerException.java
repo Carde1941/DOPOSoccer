@@ -1,5 +1,6 @@
 package domain;
 
+/** Los errores que el usuario puede ver. Cada constante es un mensaje listo para mostrar. */
 public class DOPOSoccerException extends Exception {
     public static final String ESTADISTICA_FUERA_DE_RANGO = "El valor de una estadística debe estar entre 1 y 10";
     public static final String NO_HAY_PARTIDO = "No hay ningun partido en curso para guardar";
@@ -18,10 +19,21 @@ public class DOPOSoccerException extends Exception {
     public static final String ERROR_AL_ABRIR_PROGRESO = "No se pudo abrir el progreso de los jugadores.";
     public static final String ARCHIVO_NO_ES_PROGRESO = "El archivo no tiene el progreso de DOPOSoccer.";
 
+    /**
+     * Crea el error con su mensaje.
+     *
+     * @param message el mensaje que va a ver el usuario
+     */
     public DOPOSoccerException(String message) {
         super(message);
     }
 
+    /**
+     * Crea el error con su mensaje y guarda el error original que lo causó.
+     *
+     * @param message el mensaje que va a ver el usuario
+     * @param causa el error original que lo provocó, para poder revisarlo después en el registro
+     */
     public DOPOSoccerException(String message, Throwable causa) {
         super(message, causa);
     }

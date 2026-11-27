@@ -2,6 +2,7 @@ package domain;
 
 import java.util.Random;
 
+/** Máquina que juega al azar: cada cierto tiempo hace cualquier cosa sin mirar el partido. */
 public class Torpe implements Controlador{
     private static final double SEGUNDOS_POR_DECISION = 0.4;
     private static final int ACCIONES = 6;
@@ -9,10 +10,16 @@ public class Torpe implements Controlador{
     private double espera; 
     
 
+    /** Crea la máquina con azar de verdad. */
     public Torpe() {
         this(new Random());
     }
 
+    /**
+     * Crea la máquina con un azar escogido. Sirve en las pruebas para saber qué va a hacer.
+     *
+     * @param azar de dónde saca los números al azar
+     */
     public Torpe(Random azar){
         this.azar = azar;
     }
