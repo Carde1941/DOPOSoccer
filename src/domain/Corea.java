@@ -1,5 +1,9 @@
 package domain;
 
+/**
+ * Corea del Sur. Su poder, el Aura Azul, sale recto y muy rápido, y empuja al rival hacia su propio
+ * arco.
+ */
 public class Corea extends Personaje{
     private static final double DANO_TIRO = 40;
     private static final double VELOCIDAD_TIRO = 1300;
@@ -12,6 +16,11 @@ public class Corea extends Personaje{
     @Override
     public double getDanoTiro(){
         return DANO_TIRO;
+    }
+
+    @Override
+    public String getNombrePoder(){
+        return "Aura Azul";
     }
 
     @Override

@@ -12,12 +12,19 @@ import java.awt.RenderingHints;
 
 import javax.swing.JButton;
 
+/** Botón con el estilo del juego: redondeado, de color y con el texto en mayúsculas. */
 public class BotonJuego extends JButton {
     private static final int ARCO = 18;
     private static final int BORDE = 3;
     private static final int SOMBRA = 6;
     private Color color;
 
+    /**
+     * Crea el botón.
+     *
+     * @param texto lo que dice el botón
+     * @param color el color del botón
+     */
     public BotonJuego(String texto, Color color) {
         super(texto.toUpperCase());
         this.color = color;
@@ -74,4 +81,4 @@ public class BotonJuego extends JButton {
         g2.drawString(getText(), x, y);
         g2.dispose();
     }
-}
+}

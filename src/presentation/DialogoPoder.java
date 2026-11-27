@@ -15,11 +15,26 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-/** Ventanita que explica el tiro de poder de un personaje. */
+import domain.DOPOSoccer;
+import domain.DOPOSoccerException;
+
+/**
+ * Ventana que explica el poder de un personaje: cómo sale el tiro, qué le hace al rival, cuánto dura y
+ * cuánto daño hace.
+ */
 public class DialogoPoder extends JDialog {
 
-    public DialogoPoder(Component origen, Pais pais, Color color) {
-        super(SwingUtilities.getWindowAncestor(origen), pais.getPoder(), Dialog.ModalityType.APPLICATION_MODAL);
+    /**
+     * Crea la ventana.
+     *
+     * @param origen desde dónde se abre la ventana, para que salga encima
+     * @param juego el juego; la pantalla le pide a él toda la información
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @param color el color del jugador en la pantalla
+     * @throws DOPOSoccerException si el personaje no existe
+     */
+    public DialogoPoder(Component origen, DOPOSoccer juego, String personaje, Color color) throws DOPOSoccerException {
+        super(SwingUtilities.getWindowAncestor(origen), juego.getNombrePoder(personaje), Dialog.ModalityType.APPLICATION_MODAL);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
 
@@ -30,12 +45,12 @@ public class DialogoPoder extends JDialog {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(3, 8, 3, 8);
 
-        panel.add(texto(pais.getPoder().toUpperCase(), Estilo.BOTON.deriveFont(24f), Estilo.AMARILLO), c);
-        panel.add(texto(pais.toString(), Estilo.NORMAL, Estilo.TEXTO), c);
-        agregar(panel, c, "Cómo sale el tiro", pais.getTiro());
-        agregar(panel, c, "Efecto si golpea al rival", pais.getEfecto());
-        agregar(panel, c, "Duración", pais.getDuracion() + " segundos");
-        agregar(panel, c, "Daño", pais.getDano() + " × multiplicador de Kick");
+        panel.add(texto(juego.getNombrePoder(personaje).toUpperCase(), Estilo.BOTON.deriveFont(24f), Estilo.AMARILLO), c);
+        panel.add(texto(personaje, Estilo.NORMAL, Estilo.TEXTO), c);
+        agregar(panel, c, "Cómo sale el tiro", juego.getDescripcionTiro(personaje));
+        agregar(panel, c, "Efecto si golpea al rival", juego.getDescripcionEfecto(personaje));
+        agregar(panel, c, "Duración", juego.getDuracionEfecto(personaje) + " segundos");
+        agregar(panel, c, "Daño", (int) juego.getDanoPoder(personaje) + " × multiplicador de Kick");
 
         BotonJuego cerrar = new BotonJuego("Entendido", color);
         cerrar.setFont(Estilo.BOTON.deriveFont(14f));
@@ -62,4 +77,4 @@ public class DialogoPoder extends JDialog {
         l.setForeground(color);
         return l;
     }
-}
+}

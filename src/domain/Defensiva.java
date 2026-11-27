@@ -1,6 +1,9 @@
 package domain;
 
-/** Su prioridad es defender el arco: espera cerca de él y solo sale cuando el balón entra a su mitad. */
+/**
+ * Máquina que cuida su arco: espera cerca de él y solo sale a buscar el balón cuando entra a su mitad
+ * de la cancha.
+ */
 public class Defensiva extends Maquina{
     private static final double DISTANCIA_AL_ARCO = 200;
 

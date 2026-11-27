@@ -4,6 +4,11 @@ package domain;
 public class TiroRecto implements Tiro {
     private final double velocidad;
 
+    /**
+     * Crea el tiro.
+     *
+     * @param velocidad qué tan rápido sale
+     */
     public TiroRecto(double velocidad){
         this.velocidad = velocidad;
     }
@@ -11,6 +16,11 @@ public class TiroRecto implements Tiro {
     @Override
     public void impulsar(Balon balon, int sentido){
         balon.aplicarImpulso(sentido * velocidad, 0);
+    }
+
+    @Override
+    public String getDescripcion(){
+        return "Recto y horizontal, sin caer mientras dura el poder.";
     }
 
     @Override

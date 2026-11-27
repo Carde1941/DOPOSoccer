@@ -3,6 +3,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Un partido entre dos jugadores. En cada paso mueve todo, revisa los choques, las patadas y los
+ * poderes, cuenta los goles y decide si ya terminó.
+ */
 public class Partido implements Serializable{
     private static final double ALTURA_SAQUE = 100.0;
     private static final int PUNTOS_GANADOR = 100;
@@ -18,6 +22,13 @@ public class Partido implements Serializable{
     private TipoPartido tipoPartido;
     private boolean terminado, pausado; 
 
+    /**
+     * Crea el partido con los jugadores en sus puestos y el balón en el centro.
+     *
+     * @param jugadorIzquierdo el jugador que arranca a la izquierda
+     * @param jugadorDerecho el jugador que arranca a la derecha
+     * @param tipoPartido cómo se decide cuándo termina el partido
+     */
     public Partido(Jugador jugadorIzquierdo, Jugador jugadorDerecho, TipoPartido tipoPartido){
         this.jugadorIzquierdo = jugadorIzquierdo;
         this.jugadorDerecho = jugadorDerecho;
@@ -27,6 +38,13 @@ public class Partido implements Serializable{
         colocarJugadores();
     }
 
+    /**
+     * Avanza el partido un paso, en este orden: el tiempo, las decisiones de cada jugador, el balón,
+     * los jugadores, los choques, los poderes, las patadas y los goles. Si está pausado o ya terminó,
+     * no hace nada.
+     *
+     * @param segundos cuánto tiempo pasó desde la última vez, en segundos
+     */
     public void actualizar(double segundos){
         if(terminado || pausado){
             return;
@@ -54,38 +72,75 @@ public class Partido implements Serializable{
         }
     }
 
+    /** Pausa el partido. */
     public void pausar(){
         pausado = true;
     }
 
+    /** Sigue el partido. */
     public void reanudar(){
         pausado = false;
     }
 
+    /**
+     * Dice si el partido terminó.
+     *
+     * @return true si terminó
+     */
     public boolean haTerminado(){
         return terminado;
     }
 
+    /**
+     * Dice si está en pausa.
+     *
+     * @return true si está pausado
+     */
     public boolean estaPausado(){
         return pausado;
     }
 
+    /**
+     * El tipo de partido.
+     *
+     * @return el tipo de partido
+     */
     public TipoPartido getTipoPartido(){
         return tipoPartido;
     }
 
+    /**
+     * La cancha.
+     *
+     * @return la cancha
+     */
     public Cancha getCancha(){
         return cancha;
     }
 
+    /**
+     * El balón de verdad.
+     *
+     * @return el balón
+     */
     public Balon getBalon(){
         return balon;
     }
 
+    /**
+     * El jugador de la izquierda.
+     *
+     * @return el jugador
+     */
     public Jugador getJugadorIzquierdo(){
         return jugadorIzquierdo;
     }
 
+    /**
+     * El jugador de la derecha.
+     *
+     * @return el jugador
+     */
     public Jugador getJugadorDerecho(){
         return jugadorDerecho;
     }
@@ -123,6 +178,11 @@ public class Partido implements Serializable{
         }
     }
 
+    /**
+     * El jugador que tiene más goles.
+     *
+     * @return el jugador, o null si van empatados
+     */
     public Jugador getGanador(){
         if(jugadorDerecho.getGoles() > jugadorIzquierdo.getGoles()){
             return jugadorDerecho; 
@@ -133,6 +193,7 @@ public class Partido implements Serializable{
         }
     }
 
+    /** Termina el partido y reparte los puntos. Si ya había terminado, no hace nada. */
     public void terminar(){
         if(!terminado){
             finalizar();
@@ -186,18 +247,43 @@ public class Partido implements Serializable{
         afectado.aplicarEfecto(poder.getEfecto(), this);
     }
 
+    /**
+     * Hacia dónde ataca un jugador.
+     *
+     * @param jugador el jugador
+     * @return 1 si ataca hacia la derecha y -1 si ataca hacia la izquierda
+     */
     public int sentidoDeAtaque(Jugador jugador){
         return (jugador == jugadorIzquierdo) ? 1 : -1;
     }
 
+    /**
+     * Hacia dónde queda el arco que defiende un jugador.
+     *
+     * @param jugador el jugador
+     * @return 1 si queda a la derecha y -1 si queda a la izquierda
+     */
     public int sentidoHaciaSuArco(Jugador jugador){
         return -sentidoDeAtaque(jugador);
     }
 
+    /**
+     * El rival de un jugador.
+     *
+     * @param jugador el jugador
+     * @return el otro jugador
+     */
     public Jugador rivalDe(Jugador jugador){
         return (jugador == jugadorIzquierdo) ? jugadorDerecho : jugadorIzquierdo;
     }
 
+    /**
+     * Saca balones falsos desde donde está el balón, abiertos en abanico hacia arriba. Duran un tiempo
+     * y desaparecen.
+     *
+     * @param cantidad cuántos balones falsos
+     * @param duracion cuántos segundos dura
+     */
     public void dividirBalon(int cantidad, double duracion){
         quitarBalonesFalsos();
         for(int i = 0; i < cantidad; i++){
@@ -229,6 +315,11 @@ public class Partido implements Serializable{
         tiempoFalsos = 0;
     }
 
+    /**
+     * Los balones falsos que hay en la cancha.
+     *
+     * @return la lista; está vacía si no hay
+     */
     public List<Balon> getBalonesFalsos(){
         return balonesFalsos;
     }

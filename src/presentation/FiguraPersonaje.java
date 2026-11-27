@@ -5,7 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-/** Dibuja a un personaje como cabeza grande con un guayo de perfil asomando debajo. */
+/** Dibuja a un personaje como una cabeza grande con un guayo asomando por debajo. */
 public final class FiguraPersonaje {
     private static final double ALTO_CABEZA = 1.0;
     private static final double ALTO_GUAYO = 0.32;
@@ -14,26 +14,30 @@ public final class FiguraPersonaje {
     private FiguraPersonaje() { }
 
     /**
-     * @param centro         x del centro del personaje
-     * @param pies           y donde apoya el guayo
-     * @param alto           alto total de la figura
-     * @param mirandoDerecha true si la punta del guayo apunta a la derecha
-     * @param pateando       true para mover el guayo hacia adelante
+     * Dibuja al personaje parado sobre sus pies.
+     *
+     * @param g donde se dibuja
+     * @param personaje el nombre del personaje, por ejemplo "Camerún"
+     * @param centro el centro del personaje, de izquierda a derecha
+     * @param pies dónde quedan los pies, de arriba hacia abajo
+     * @param alto qué tan grande se dibuja
+     * @param mirandoDerecha true si mira hacia la derecha
+     * @param pateando true si está pateando, para levantar el guayo
      */
-    public static void dibujar(Graphics2D g, Pais pais, int centro, int pies, int alto,
+    public static void dibujar(Graphics2D g, String personaje, int centro, int pies, int alto,
                                boolean mirandoDerecha, boolean pateando) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         int altoGuayo = (int) (alto * ALTO_GUAYO);
         int sentido = mirandoDerecha ? 1 : -1;
-        dibujarGuayo(g2, pais, centro, pies, altoGuayo, sentido, pateando);
-        dibujarCabeza(g2, pais, centro, pies - altoGuayo / 3, (int) (alto * ALTO_CABEZA), sentido);
+        dibujarGuayo(g2, personaje, centro, pies, altoGuayo, sentido, pateando);
+        dibujarCabeza(g2, personaje, centro, pies - altoGuayo / 3, (int) (alto * ALTO_CABEZA), sentido);
         g2.dispose();
     }
 
     /** La imagen mira a la derecha; con sentido -1 se dibuja en espejo para que mire a la izquierda. */
-    private static void dibujarCabeza(Graphics2D g2, Pais pais, int centro, int abajo, int alto, int sentido) {
-        BufferedImage cabeza = Imagenes.get(pais.getCabeza());
+    private static void dibujarCabeza(Graphics2D g2, String personaje, int centro, int abajo, int alto, int sentido) {
+        BufferedImage cabeza = Apariencia.cabeza(personaje);
         if (cabeza == null) {
             return;
         }
@@ -43,9 +47,9 @@ public final class FiguraPersonaje {
     }
 
     /** El guayo va antes que la cabeza: la cabeza lo tapa por arriba y asoma la punta. */
-    private static void dibujarGuayo(Graphics2D g2, Pais pais, int centro, int pies, int alto,
+    private static void dibujarGuayo(Graphics2D g2, String personaje, int centro, int pies, int alto,
                                      int sentido, boolean pateando) {
-        BufferedImage guayo = Imagenes.get(pais.getGuayo());
+        BufferedImage guayo = Apariencia.guayo(personaje);
         if (guayo == null) {
             return;
         }
@@ -60,4 +64,4 @@ public final class FiguraPersonaje {
             (double) alto / guayo.getHeight(), 0, -alto), null);
         pie.dispose();
     }
-}
+}

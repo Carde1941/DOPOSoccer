@@ -1,5 +1,6 @@
 package domain;
 
+/** Camerún. Su poder, el Rayo, sale recto y deja al rival electrocutado. */
 public class Camerun extends Personaje{
     private static final double DANO_TIRO = 60;
     private static final double VELOCIDAD_TIRO = 950;
@@ -12,6 +13,11 @@ public class Camerun extends Personaje{
     @Override
     public double getDanoTiro(){
         return DANO_TIRO;
+    }
+
+    @Override
+    public String getNombrePoder(){
+        return "Rayo";
     }
 
     @Override

@@ -9,12 +9,22 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 
+/**
+ * Selector con flechas a los lados para pasar de una opción a otra.
+ *
+ * @param <T> el tipo de las opciones
+ */
 public class Selector<T> extends JPanel {
     private List<T> opciones;
     private int indice;
     private JLabel valor;
     private Runnable alCambiar = () -> { };
 
+    /**
+     * Crea el selector con la primera opción escogida.
+     *
+     * @param opciones las opciones
+     */
     public Selector(List<T> opciones) {
         this.opciones = opciones;
         setOpaque(false);
@@ -36,10 +46,20 @@ public class Selector<T> extends JPanel {
         mostrarValor();
     }
 
+    /**
+     * La opción escogida.
+     *
+     * @return la opción
+     */
     public T getValor() {
         return opciones.get(indice);
     }
 
+    /**
+     * Escoge una opción. Si no está en la lista, no cambia nada.
+     *
+     * @param opcion la opción
+     */
     public void seleccionar(T opcion) {
         int posicion = opciones.indexOf(opcion);
         if (posicion >= 0) {
@@ -48,12 +68,22 @@ public class Selector<T> extends JPanel {
         }
     }
 
+    /**
+     * Cambia las opciones del selector.
+     *
+     * @param nuevas las opciones nuevas
+     */
     public void setOpciones(List<T> nuevas) {
         opciones = nuevas;
         indice = Math.min(indice, opciones.size() - 1);
         mostrarValor();
     }
 
+    /**
+     * Lo que hay que hacer cada vez que el usuario cambia la opción.
+     *
+     * @param accion lo que se hace
+     */
     public void alCambiar(Runnable accion) {
         this.alCambiar = accion;
     }
@@ -67,4 +97,4 @@ public class Selector<T> extends JPanel {
     private void mostrarValor() {
         valor.setText(getValor().toString().toUpperCase());
     }
-}
+}

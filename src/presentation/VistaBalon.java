@@ -7,7 +7,10 @@ import java.awt.Polygon;
 
 import domain.DOPOSoccer;
 
-/** Hoja: el balón, blanco con un pentágono negro; con estela si lleva un tiro de poder y repetido si hay confusión. */
+/**
+ * Dibuja el balón. Si lleva un tiro de poder le deja una estela del color del personaje, y si hay
+ * confusión también dibuja los balones falsos.
+ */
 public class VistaBalon implements Vista {
     private static final int TRAMOS_ESTELA = 6;
     private static final double SEGUNDOS_POR_TRAMO = 0.012;
@@ -22,7 +25,7 @@ public class VistaBalon implements Vista {
         int cx = (int) juego.getXBalon();
         int cy = (int) juego.getYBalon();
         if (juego.balonTienePoder()) {
-            estela(g2, juego, Pais.desdeNombre(juego.getPersonajeDelPoder()).getAura(), cx, cy, r);
+            estela(g2, juego, Apariencia.aura(juego.getPersonajeDelPoder()), cx, cy, r);
         }
         balon(g2, cx, cy, r, suelo);
     }

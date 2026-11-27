@@ -10,20 +10,38 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-/** Columna de un jugador: nombre, personaje, selector de país y su poder. */
+import domain.DOPOSoccer;
+import domain.DOPOSoccerException;
+
+/**
+ * La columna de un jugador en "Arma el picadito": su nombre, la imagen del personaje, el selector, su
+ * poder y el botón de mejoras.
+ */
 public class TarjetaJugador extends PanelNeon {
-    private Selector<Pais> pais;
+    private DOPOSoccer juego;
+    private Selector<String> personaje;
     private Figura figura;
     private JLabel poder;
 
-    public TarjetaJugador(String titulo, Pais inicial, Color color, boolean mirandoDerecha, DOPOSoccerGUI ventana, int lado) {
+    /**
+     * Crea la tarjeta.
+     *
+     * @param titulo el nombre del jugador, por ejemplo "Jugador 1"
+     * @param inicial la posición en la lista del personaje que sale escogido al principio
+     * @param color el color del jugador en la pantalla
+     * @param mirandoDerecha true si el personaje mira hacia la derecha
+     * @param ventana la ventana principal del juego
+     * @param lado el lado del jugador: DOPOSoccer.IZQUIERDO o DOPOSoccer.DERECHO
+     */
+    public TarjetaJugador(String titulo, int inicial, Color color, boolean mirandoDerecha, DOPOSoccerGUI ventana, int lado) {
         super(color);
+        juego = ventana.getJuego();
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -34,10 +52,11 @@ public class TarjetaJugador extends PanelNeon {
         figura = new Figura(mirandoDerecha);
         add(figura, c);
 
-        pais = new Selector<>(Arrays.asList(Pais.values()));
-        pais.seleccionar(inicial);
-        pais.alCambiar(this::mostrarPais);
-        add(pais, c);
+        List<String> personajes = juego.getPersonajes();
+        personaje = new Selector<>(personajes);
+        personaje.seleccionar(personajes.get(inicial % personajes.size()));
+        personaje.alCambiar(this::mostrarPersonaje);
+        add(personaje, c);
 
         poder = etiqueta("", Estilo.NORMAL, Estilo.CIAN);
         add(poder, c);
@@ -45,7 +64,7 @@ public class TarjetaJugador extends PanelNeon {
         BotonJuego info = new BotonJuego("Info del poder", Estilo.AMARILLO);
         info.setFont(Estilo.BOTON.deriveFont(13f));
         info.setPreferredSize(new Dimension(170, 34));
-        info.addActionListener(e -> new DialogoPoder(this, getPais(), color).setVisible(true));
+        info.addActionListener(e -> mostrarPoder(color));
         c.fill = GridBagConstraints.NONE;
         add(info, c);
 
@@ -55,16 +74,33 @@ public class TarjetaJugador extends PanelNeon {
         mejoras.addActionListener(e -> new DialogoMejoras(this, ventana, lado, titulo, color).setVisible(true));
         add(mejoras, c);
 
-        mostrarPais();
+        mostrarPersonaje();
     }
 
-    public Pais getPais() {
-        return pais.getValor();
+    /**
+     * El personaje escogido.
+     *
+     * @return el nombre del personaje
+     */
+    public String getPersonaje() {
+        return personaje.getValor();
     }
 
-    private void mostrarPais() {
-        poder.setText("Poder: " + getPais().getPoder());
+    private void mostrarPersonaje() {
+        try {
+            poder.setText("Poder: " + juego.getNombrePoder(getPersonaje()));
+        } catch (DOPOSoccerException e) {
+            Log.record(e);
+        }
         figura.repaint();
+    }
+
+    private void mostrarPoder(Color color) {
+        try {
+            new DialogoPoder(this, juego, getPersonaje(), color).setVisible(true);
+        } catch (DOPOSoccerException e) {
+            Log.record(e);
+        }
     }
 
     private static JLabel etiqueta(String texto, Font fuente, Color color) {
@@ -88,7 +124,7 @@ public class TarjetaJugador extends PanelNeon {
 
         @Override
         protected void paintComponent(Graphics g) {
-            BufferedImage imagen = Imagenes.get(getPais().getImagen());
+            BufferedImage imagen = Apariencia.cuerpo(getPersonaje());
             if (imagen == null) {
                 return;
             }
@@ -102,4 +138,4 @@ public class TarjetaJugador extends PanelNeon {
             g2.dispose();
         }
     }
-}
+}

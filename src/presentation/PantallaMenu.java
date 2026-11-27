@@ -10,9 +10,15 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/** El menú principal: jugar, abrir una partida, ver los controles o salir. */
 public class PantallaMenu extends PanelConFondo {
     private DOPOSoccerGUI ventana;
 
+    /**
+     * Crea el menú.
+     *
+     * @param ventana la ventana principal del juego
+     */
     public PantallaMenu(DOPOSoccerGUI ventana) {
         super("DSMenu.png", false);
         this.ventana = ventana;
@@ -42,7 +48,7 @@ public class PantallaMenu extends PanelConFondo {
         fila.setOpaque(false);
         JButton controles = new BotonJuego("Controles", Estilo.AMARILLO);
         controles.setPreferredSize(new Dimension(125, 38));
-        controles.addActionListener(e -> new DialogoControles(this).setVisible(true));
+        controles.addActionListener(e -> new DialogoControles(this, ventana.getJuego()).setVisible(true));
         JButton salir = new BotonJuego("Salir", Estilo.AMARILLO);
         salir.setPreferredSize(new Dimension(125, 38));
         salir.addActionListener(e -> ventana.salir());
@@ -53,4 +59,4 @@ public class PantallaMenu extends PanelConFondo {
         c.weighty = 0.08;
         add(Box.createVerticalGlue(), c);
     }
-}
+}
