@@ -95,6 +95,26 @@ public class DOPOSoccer {
         jugador(jugador).setPersonaje(Catalogo.crearPersonaje(personaje));
     }
 
+    public String getNombrePoder(String personaje) throws DOPOSoccerException {
+        return Catalogo.crearPersonaje(personaje).getNombrePoder();
+    }
+
+    public String getDescripcionTiro(String personaje) throws DOPOSoccerException {
+        return Catalogo.crearPersonaje(personaje).crearTiroPoder().getDescripcion();
+    }
+
+    public String getDescripcionEfecto(String personaje) throws DOPOSoccerException {
+        return Catalogo.crearPersonaje(personaje).crearEfecto().getDescripcion();
+    }
+
+    public double getDanoPoder(String personaje) throws DOPOSoccerException {
+        return Catalogo.crearPersonaje(personaje).getDanoTiro();
+    }
+
+    public double getDuracionEfecto(String personaje) throws DOPOSoccerException {
+        return Catalogo.crearPersonaje(personaje).crearEfecto().getDuracion();
+    }
+
     public String getPersonaje(int jugador) {
         return jugador(jugador).getPersonaje().getNombre();
     }

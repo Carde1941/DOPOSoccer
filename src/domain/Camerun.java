@@ -15,6 +15,11 @@ public class Camerun extends Personaje{
     }
 
     @Override
+    public String getNombrePoder(){
+        return "Rayo";
+    }
+
+    @Override
     public Tiro crearTiroPoder(){
         return new TiroRecto(VELOCIDAD_TIRO);
     }

@@ -16,6 +16,11 @@ public class Nigeria extends Personaje{
     }
 
     @Override
+    public String getNombrePoder(){
+        return "Tornado";
+    }
+
+    @Override
     public Tiro crearTiroPoder(){
         return new TiroParabolico(TIRO_VX, TIRO_VY);
     }

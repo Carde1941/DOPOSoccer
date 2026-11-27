@@ -12,5 +12,10 @@ public class TiroParabolico implements Tiro {
     @Override
     public void impulsar(Balon balon, int sentido){
         balon.aplicarImpulso(sentido * adelante, -arriba);
-    } 
+    }
+
+    @Override
+    public String getDescripcion(){
+        return "En parábola: sube y cae con la gravedad.";
+    }
 }

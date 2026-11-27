@@ -13,6 +13,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -22,9 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import domain.DOPOSoccer;
+
 public class DialogoControles extends JDialog {
 
-    public DialogoControles(Component origen) {
+    public DialogoControles(Component origen, DOPOSoccer juego) {
         super(SwingUtilities.getWindowAncestor(origen), "Controles", Dialog.ModalityType.APPLICATION_MODAL);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
@@ -42,9 +45,10 @@ public class DialogoControles extends JDialog {
         c.gridy = 1;
         c.gridwidth = 1;
         c.anchor = GridBagConstraints.NORTH;
-        panel.add(columna("Jugador 1", Estilo.CIAN, Pais.NIGERIA, true, Controles.izquierdo()), c);
+        List<String> personajes = juego.getPersonajes();
+        panel.add(columna("Jugador 1", Estilo.CIAN, personajes.get(0), true, Controles.izquierdo()), c);
         c.gridx = 1;
-        panel.add(columna("Jugador 2", Estilo.ROSADO, Pais.CAMERUN, false, Controles.derecho()), c);
+        panel.add(columna("Jugador 2", Estilo.ROSADO, personajes.get(1 % personajes.size()), false, Controles.derecho()), c);
 
         c.gridx = 0;
         c.gridy = 2;
@@ -71,7 +75,7 @@ public class DialogoControles extends JDialog {
         setLocationRelativeTo(origen);
     }
 
-    private JPanel columna(String titulo, Color color, Pais pais, boolean mirandoDerecha, Controles controles) {
+    private JPanel columna(String titulo, Color color, String personaje, boolean mirandoDerecha, Controles controles) {
         JPanel columna = new JPanel(new GridBagLayout());
         columna.setOpaque(false);
         GridBagConstraints c = new GridBagConstraints();
@@ -80,7 +84,7 @@ public class DialogoControles extends JDialog {
         c.insets = new Insets(2, 6, 2, 6);
         columna.add(texto(titulo.toUpperCase(), Estilo.BOTON, color), c);
         c.gridy++;
-        columna.add(new Figura(pais, mirandoDerecha), c);
+        columna.add(new Figura(personaje, mirandoDerecha), c);
         c.gridwidth = 1;
         for (Map.Entry<String, String> tecla : controles.getTeclas().entrySet()) {
             c.gridy++;
@@ -102,18 +106,18 @@ public class DialogoControles extends JDialog {
     }
 
     private static class Figura extends JComponent {
-        private Pais pais;
+        private String personaje;
         private boolean mirandoDerecha;
 
-        Figura(Pais pais, boolean mirandoDerecha) {
-            this.pais = pais;
+        Figura(String personaje, boolean mirandoDerecha) {
+            this.personaje = personaje;
             this.mirandoDerecha = mirandoDerecha;
             setPreferredSize(new Dimension(130, 140));
         }
 
         @Override
         protected void paintComponent(Graphics g) {
-            BufferedImage imagen = Imagenes.get(pais.getImagen());
+            BufferedImage imagen = Apariencia.cuerpo(personaje);
             if (imagen == null) {
                 return;
             }

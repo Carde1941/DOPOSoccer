@@ -8,6 +8,8 @@ public abstract class Personaje implements Serializable{
 
     public abstract double getDanoTiro();
 
+    public abstract String getNombrePoder();
+
     public abstract Tiro crearTiroPoder();
 
     public abstract Efecto crearEfecto();

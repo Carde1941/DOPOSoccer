@@ -36,15 +36,15 @@ public class VistaMarcador implements Vista {
     }
 
     private void dibujarLado(Graphics2D g2, DOPOSoccer juego, int lado, int x, Color color) {
-        Pais pais = Pais.desdeNombre(juego.getPersonaje(lado));
+        String personaje = juego.getPersonaje(lado);
         caja(g2, x, MARGEN, ANCHO_LADO, ALTO, color);
         boolean izquierdo = lado == DOPOSoccer.IZQUIERDO;
         g2.setFont(NOMBRE);
         g2.setColor(Estilo.TEXTO);
-        String nombre = pais.toString().toUpperCase();
+        String nombre = personaje.toUpperCase();
         int anchoNombre = g2.getFontMetrics().stringWidth(nombre);
         g2.drawString(nombre, izquierdo ? x + 18 : x + ANCHO_LADO - 18 - anchoNombre, MARGEN + 34);
-        dibujarEstado(g2, juego, lado, pais, izquierdo ? x + ANCHO_LADO - 18 : x + 18, izquierdo);
+        dibujarEstado(g2, juego, lado, personaje, izquierdo ? x + ANCHO_LADO - 18 : x + 18, izquierdo);
 
         double vida = juego.getVida(lado) / juego.getVidaMaxima(lado);
         double poder = juego.getProgresoPoder(lado);
@@ -70,7 +70,7 @@ public class VistaMarcador implements Vista {
     }
 
     /** Al otro lado del nombre: aturdido, el efecto que sufre, el aura activa o el poder listo con su tecla. */
-    private void dibujarEstado(Graphics2D g2, DOPOSoccer juego, int lado, Pais pais, int borde, boolean izquierdo) {
+    private void dibujarEstado(Graphics2D g2, DOPOSoccer juego, int lado, String personaje, int borde, boolean izquierdo) {
         String texto;
         Color color;
         String efecto = juego.getEfecto(lado);
@@ -81,8 +81,8 @@ public class VistaMarcador implements Vista {
             texto = efecto.toUpperCase();
             color = Estilo.PELIGRO;
         } else if (juego.tieneAura(lado)) {
-            texto = "¡" + pais.getPoder().toUpperCase() + "!";
-            color = pais.getAura();
+            texto = "¡" + nombrePoder(juego, personaje).toUpperCase() + "!";
+            color = Apariencia.aura(personaje);
         } else if (juego.getProgresoPoder(lado) >= 1) {
             texto = juego.usaTeclado(lado) ? "PODER LISTO (" + teclaPoder(lado) + ")" : "PODER LISTO";
             color = Estilo.AMARILLO;
@@ -93,6 +93,15 @@ public class VistaMarcador implements Vista {
         int anchoTexto = g2.getFontMetrics().stringWidth(texto);
         g2.setColor(color);
         g2.drawString(texto, izquierdo ? borde - anchoTexto : borde, MARGEN + 32);
+    }
+
+    private String nombrePoder(DOPOSoccer juego, String personaje) {
+        try {
+            return juego.getNombrePoder(personaje);
+        } catch (DOPOSoccerException e) {
+            Log.record(e);
+            return "Poder";
+        }
     }
 
     private String teclaPoder(int lado) {

@@ -8,6 +8,11 @@ public class SinEfecto extends Efecto{
     }
 
     @Override
+    public String getDescripcion(){
+        return "No le pasa nada.";
+    }
+
+    @Override
     public String getNombre(){
         return "Ninguno";
     }

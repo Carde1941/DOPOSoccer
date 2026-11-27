@@ -42,7 +42,7 @@ public class PantallaMenu extends PanelConFondo {
         fila.setOpaque(false);
         JButton controles = new BotonJuego("Controles", Estilo.AMARILLO);
         controles.setPreferredSize(new Dimension(125, 38));
-        controles.addActionListener(e -> new DialogoControles(this).setVisible(true));
+        controles.addActionListener(e -> new DialogoControles(this, ventana.getJuego()).setVisible(true));
         JButton salir = new BotonJuego("Salir", Estilo.AMARILLO);
         salir.setPreferredSize(new Dimension(125, 38));
         salir.addActionListener(e -> ventana.salir());

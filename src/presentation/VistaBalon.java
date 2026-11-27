@@ -22,7 +22,7 @@ public class VistaBalon implements Vista {
         int cx = (int) juego.getXBalon();
         int cy = (int) juego.getYBalon();
         if (juego.balonTienePoder()) {
-            estela(g2, juego, Pais.desdeNombre(juego.getPersonajeDelPoder()).getAura(), cx, cy, r);
+            estela(g2, juego, Apariencia.aura(juego.getPersonajeDelPoder()), cx, cy, r);
         }
         balon(g2, cx, cy, r, suelo);
     }

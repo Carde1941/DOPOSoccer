@@ -10,6 +10,11 @@ public class Confusion extends Efecto{
     }
 
     @Override
+    public String getDescripcion(){
+        return "El balón se divide en " + (BALONES_FALSOS + 1) + " iguales; " + BALONES_FALSOS + " son falsos.";
+    }
+
+    @Override
     public String getNombre(){
         return "Confusión";
     }

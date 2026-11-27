@@ -10,6 +10,11 @@ public class Inconsciente extends Efecto{
     }
 
     @Override
+    public String getDescripcion(){
+        return "Sale lanzado al aire y no puede moverse, saltar ni patear.";
+    }
+
+    @Override
     public String getNombre(){
         return "Inconsciente";
     }
