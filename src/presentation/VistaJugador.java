@@ -28,7 +28,7 @@ public class VistaJugador implements Vista {
 
     @Override
     public void dibujar(Graphics2D g2, DOPOSoccer juego) {
-        Pais pais = Pais.desdeNombre(juego.getPersonaje(lado));
+        String personaje = juego.getPersonaje(lado);
         int x = (int) juego.getXJugador(lado);
         int y = (int) juego.getYJugador(lado);
         int ancho = (int) juego.getAnchoJugador(lado);
@@ -41,14 +41,14 @@ public class VistaJugador implements Vista {
         g2.fillOval(centro - ancho / 2, (int) juego.getSuelo() - 6, ancho, 12);
 
         if (juego.tieneAura(lado)) {
-            aura(g2, pais.getAura(), centro, y + alto / 2, alto, tiempo);
+            aura(g2, Apariencia.aura(personaje), centro, y + alto / 2, alto, tiempo);
         }
         boolean mirandoDerecha = lado == DOPOSoccer.IZQUIERDO;
         String efecto = juego.getEfecto(lado);
         if (juego.estaAturdido(lado) || EFECTOS_QUE_DUERMEN.contains(efecto)) {
-            dormido(g2, pais, centro, pies, alto, mirandoDerecha, tiempo);
+            dormido(g2, personaje, centro, pies, alto, mirandoDerecha, tiempo);
         } else {
-            FiguraPersonaje.dibujar(g2, pais, centro, pies, (int) (alto * ESCALA), mirandoDerecha, juego.estaPateando(lado));
+            FiguraPersonaje.dibujar(g2, personaje, centro, pies, (int) (alto * ESCALA), mirandoDerecha, juego.estaPateando(lado));
         }
         AdornoEfecto adorno = ADORNOS.get(efecto);
         if (adorno != null) {
@@ -72,12 +72,12 @@ public class VistaJugador implements Vista {
     }
 
     /** Acostado de espaldas sobre el suelo, con las Z del sueño subiendo. */
-    private void dormido(Graphics2D g2, Pais pais, int centro, int pies, int alto, boolean mirandoDerecha, double tiempo) {
+    private void dormido(Graphics2D g2, String personaje, int centro, int pies, int alto, boolean mirandoDerecha, double tiempo) {
         int altoFigura = (int) (alto * ESCALA);
         int grosor = (int) (altoFigura * 0.42);
         Graphics2D acostado = (Graphics2D) g2.create();
         acostado.rotate(mirandoDerecha ? -Math.PI / 2 : Math.PI / 2, centro, pies - grosor);
-        FiguraPersonaje.dibujar(acostado, pais, centro, pies - grosor + altoFigura / 2, altoFigura, mirandoDerecha, false);
+        FiguraPersonaje.dibujar(acostado, personaje, centro, pies - grosor + altoFigura / 2, altoFigura, mirandoDerecha, false);
         acostado.dispose();
 
         int cabeza = centro + (mirandoDerecha ? -altoFigura / 3 : altoFigura / 3);

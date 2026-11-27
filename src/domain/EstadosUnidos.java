@@ -16,6 +16,11 @@ public class EstadosUnidos extends Personaje{
     }
 
     @Override
+    public String getNombrePoder(){
+        return "Ilusión";
+    }
+
+    @Override
     public Tiro crearTiroPoder(){
         return new TiroParabolico(TIRO_VX, TIRO_VY);
     }

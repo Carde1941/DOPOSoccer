@@ -54,8 +54,8 @@ public class PantallaPicadito extends PanelConFondo {
         c.fill = GridBagConstraints.BOTH;
         c.weighty = 1;
         c.insets = new Insets(0, 6, 0, 6);
-        jugador1 = new TarjetaJugador("Jugador 1", Pais.NIGERIA, Estilo.CIAN, true, ventana, DOPOSoccer.IZQUIERDO);
-        jugador2 = new TarjetaJugador("Jugador 2", Pais.CAMERUN, Estilo.ROSADO, false, ventana, DOPOSoccer.DERECHO);
+        jugador1 = new TarjetaJugador("Jugador 1", 0, Estilo.CIAN, true, ventana, DOPOSoccer.IZQUIERDO);
+        jugador2 = new TarjetaJugador("Jugador 2", 1, Estilo.ROSADO, false, ventana, DOPOSoccer.DERECHO);
         c.weightx = 1;
         columnas.add(jugador1, c);
         c.weightx = 1.25;
@@ -149,7 +149,7 @@ public class PantallaPicadito extends PanelConFondo {
 
     private void jugar() {
         ConfiguracionPartido configuracion = ventana.getConfiguracion();
-        configuracion.conPaises(jugador1.getPais(), jugador2.getPais()).conResolucion(resolucion.getValor().ancho(), resolucion.getValor().alto());
+        configuracion.conPersonajes(jugador1.getPersonaje(), jugador2.getPersonaje()).conResolucion(resolucion.getValor().ancho(), resolucion.getValor().alto());
         configuracion.conTipo(tipo.getValor(), cantidad.getValor().valor());
         if (esContraMaquina()) {
             configuracion.conMaquina(ladoMaquina.getValor().valor(), maquina.getValor());

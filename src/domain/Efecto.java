@@ -3,13 +3,21 @@ import java.io.Serializable;
 
 /** State: lo que le pasa a un jugador golpeado por un tiro de poder. Por defecto no le cambia nada. */
 public abstract class Efecto implements Serializable{
+    private final double duracion;
     private double segundosRestantes;
 
     public Efecto(double duracion){
+        this.duracion = duracion;
         segundosRestantes = duracion;
     }
 
     public abstract String getNombre();
+
+    public abstract String getDescripcion();
+
+    public double getDuracion(){
+        return duracion;
+    }
 
     public void alEmpezar(Jugador afectado, Partido partido){
     }

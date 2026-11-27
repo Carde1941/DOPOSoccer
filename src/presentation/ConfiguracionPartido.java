@@ -5,8 +5,8 @@ import domain.DOPOSoccerException;
 
 /** Builder: la pantalla "Arma el picadito" llena las partes y al final se construye el partido. */
 public class ConfiguracionPartido {
-    private Pais pais1 = Pais.NIGERIA;
-    private Pais pais2 = Pais.CAMERUN;
+    private String personaje1;
+    private String personaje2;
     private String tipo = "Por tiempo";
     private String maquina;
     private int ladoMaquina;
@@ -14,9 +14,9 @@ public class ConfiguracionPartido {
     private int ancho = 1024;
     private int alto = 576;
 
-    public ConfiguracionPartido conPaises(Pais pais1, Pais pais2) {
-        this.pais1 = pais1;
-        this.pais2 = pais2;
+    public ConfiguracionPartido conPersonajes(String personaje1, String personaje2) {
+        this.personaje1 = personaje1;
+        this.personaje2 = personaje2;
         return this;
     }
 
@@ -45,15 +45,13 @@ public class ConfiguracionPartido {
 
     public void construir(DOPOSoccer juego) throws DOPOSoccerException {
         juego.nuevoPartido(tipo, cantidad);
-        juego.elegirPersonaje(DOPOSoccer.IZQUIERDO, pais1.getNombre());
-        juego.elegirPersonaje(DOPOSoccer.DERECHO, pais2.getNombre());
+        juego.elegirPersonaje(DOPOSoccer.IZQUIERDO, personaje1);
+        juego.elegirPersonaje(DOPOSoccer.DERECHO, personaje2);
         if (maquina != null) {
             juego.ponerMaquina(ladoMaquina, maquina);
         }
     }
 
-    public Pais getPais1() { return pais1; }
-    public Pais getPais2() { return pais2; }
     public int getAncho() { return ancho; }
     public int getAlto() { return alto; }
 }

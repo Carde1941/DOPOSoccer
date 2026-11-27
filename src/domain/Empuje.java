@@ -12,6 +12,11 @@ public class Empuje extends Efecto{
     }
 
     @Override
+    public String getDescripcion(){
+        return "Sale lanzado hacia su propio arco y no se controla.";
+    }
+
+    @Override
     public String getNombre(){
         return "Empuje";
     }

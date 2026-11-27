@@ -14,6 +14,11 @@ public class TiroRecto implements Tiro {
     }
 
     @Override
+    public String getDescripcion(){
+        return "Recto y horizontal, sin caer mientras dura el poder.";
+    }
+
+    @Override
     public double getFactorGravedad(){
         return 0;
     }

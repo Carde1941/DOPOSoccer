@@ -15,6 +15,11 @@ public class Corea extends Personaje{
     }
 
     @Override
+    public String getNombrePoder(){
+        return "Aura Azul";
+    }
+
+    @Override
     public Tiro crearTiroPoder(){
         return new TiroRecto(VELOCIDAD_TIRO);
     }

@@ -10,6 +10,11 @@ public class Electrocutado extends Efecto{
     }
 
     @Override
+    public String getDescripcion(){
+        return "No puede saltar y se mueve al " + (int) (FACTOR_VELOCIDAD * 100) + " % de su velocidad.";
+    }
+
+    @Override
     public String getNombre(){
         return "Electrocutado";
     }

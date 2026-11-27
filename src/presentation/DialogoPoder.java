@@ -15,11 +15,14 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import domain.DOPOSoccer;
+import domain.DOPOSoccerException;
+
 /** Ventanita que explica el tiro de poder de un personaje. */
 public class DialogoPoder extends JDialog {
 
-    public DialogoPoder(Component origen, Pais pais, Color color) {
-        super(SwingUtilities.getWindowAncestor(origen), pais.getPoder(), Dialog.ModalityType.APPLICATION_MODAL);
+    public DialogoPoder(Component origen, DOPOSoccer juego, String personaje, Color color) throws DOPOSoccerException {
+        super(SwingUtilities.getWindowAncestor(origen), juego.getNombrePoder(personaje), Dialog.ModalityType.APPLICATION_MODAL);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
 
@@ -30,12 +33,12 @@ public class DialogoPoder extends JDialog {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(3, 8, 3, 8);
 
-        panel.add(texto(pais.getPoder().toUpperCase(), Estilo.BOTON.deriveFont(24f), Estilo.AMARILLO), c);
-        panel.add(texto(pais.toString(), Estilo.NORMAL, Estilo.TEXTO), c);
-        agregar(panel, c, "Cómo sale el tiro", pais.getTiro());
-        agregar(panel, c, "Efecto si golpea al rival", pais.getEfecto());
-        agregar(panel, c, "Duración", pais.getDuracion() + " segundos");
-        agregar(panel, c, "Daño", pais.getDano() + " × multiplicador de Kick");
+        panel.add(texto(juego.getNombrePoder(personaje).toUpperCase(), Estilo.BOTON.deriveFont(24f), Estilo.AMARILLO), c);
+        panel.add(texto(personaje, Estilo.NORMAL, Estilo.TEXTO), c);
+        agregar(panel, c, "Cómo sale el tiro", juego.getDescripcionTiro(personaje));
+        agregar(panel, c, "Efecto si golpea al rival", juego.getDescripcionEfecto(personaje));
+        agregar(panel, c, "Duración", juego.getDuracionEfecto(personaje) + " segundos");
+        agregar(panel, c, "Daño", (int) juego.getDanoPoder(personaje) + " × multiplicador de Kick");
 
         BotonJuego cerrar = new BotonJuego("Entendido", color);
         cerrar.setFont(Estilo.BOTON.deriveFont(14f));
